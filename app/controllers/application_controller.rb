@@ -1,25 +1,31 @@
 class ApplicationController < ActionController::API
   before_action :authorize_request
-
-  attr_reader :current_user
-
+  attr_reader :current_user 
+  
   private
-
+  
   def authorize_request
     header = request.headers['Authorization']
     header = header.split(' ').last if header 
-
+    
+    if header.blank?
+      return render json: { errors: ['Unauthorized Access'] }, status: :unauthorized
+    end
+    
     begin
       @decoded = JsonWebToken.decode(header)
-      if @decoded
-        @current_user = User.find(@decoded[:user_id])
-      else
-        render json: { errors: ['Unauthorized access'] }, status: :unauthorized
+      
+      if @decoded.nil?
+        return render json: { errors: ['Unauthorized access - Invalid token payload'] }, status: :unauthorized
       end
+      
+      user_id = @decoded[:user_id] || @decoded['user_id']
+      @current_user = User.find(user_id)
+      
     rescue ActiveRecord::RecordNotFound
-      render json: { errors: ['User not found'] }, status: :unauthorized
+      render json: { errors: ['User record not found'] }, status: :unauthorized
+    rescue JWT::DecodeError
+      render json: { errors: ['Invalid token signature'] }, status: :unauthorized
     end
   end
-  
 end
-
