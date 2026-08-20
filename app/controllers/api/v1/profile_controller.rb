@@ -3,7 +3,7 @@ class Api::V1::ProfileController < ApplicationController
     render json: { 
     id: @current_user.id,
     name: @current_user.name,
-    email: @current_user.email 
+    email: @current_user.email,
     }, status: :ok
   end
   def update
@@ -13,6 +13,17 @@ class Api::V1::ProfileController < ApplicationController
       render json: { errors: @current_user.errors.full_messages }, status: :unprocessable_entity
     end
   end
+  def avatar
+    if @current_user.avatar.attach(params[:avatar])
+      render json: {
+      message: "Avatar uploaded successfully",
+      avatar:  rails_blob_url(@current_user.avatar)
+      }, status: :ok
+    else
+      render json: { errors: "Failed to save avatar attachment" }, status: :unprocessable_entity
+    end
+  end
+  
   private
   
   def user_params

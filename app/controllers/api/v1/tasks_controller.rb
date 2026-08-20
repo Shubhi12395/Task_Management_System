@@ -1,4 +1,4 @@
-class Api::V1::TasksController < ApplicationController
+class Api::V1::TasksController < ApiController
     def create
         task = Task.new(task_params)
         if task.save
@@ -12,20 +12,21 @@ class Api::V1::TasksController < ApplicationController
     end
     def index
         
-        @tasks = current_user.tasks
+        @tasks = current_user.tasks.includes(:user)
         render json: @tasks, status: :ok
     end
     def show
         task_params = params.expect(:id)
-        
-        @task = @current_user.tasks.find(task_params)
+        task = @current_user.tasks.includes(:user)
+        @task=task.find(task_params)
         
         render json: @task, status: :ok
     rescue ActiveRecord::RecordNotFound
         render json: { error: "Task not found" }, status: :not_found
     end
     def update
-        @task = Task.find(params[:id])
+        task = @current_user.tasks.includes(:user)
+        @task = task.find(params[:id])
         
         if @task.update(taskupdate_params)
             render json: 
@@ -36,7 +37,8 @@ class Api::V1::TasksController < ApplicationController
         end
     end
     def destroy
-         @task = Task.find(params[:id])
+        task = @current_user.tasks.includes(:user)
+        @task = task.find(params[:id])
         if @task.destroy
             render json: 
             { message: 'Task deleted successfully',
@@ -44,9 +46,9 @@ class Api::V1::TasksController < ApplicationController
         else
             render json:
             {message: 'task not found',
-             task: @task.errors}, status: :unprocessable_entity
+            task: @task.errors}, status: :unprocessable_entity
         end
-        rescue ActiveRecord::RecordNotFound
+    rescue ActiveRecord::RecordNotFound
         render json: { error: "Task not found" }, status: :not_found
     end
     private

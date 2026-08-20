@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  ActiveAdmin.routes(self)
   namespace :api do
     namespace :v1 do
       post 'auth/signup', to: 'users#create'
@@ -6,6 +8,7 @@ Rails.application.routes.draw do
       delete 'auth/logout', to: 'users#logout' 
       get  'users/me',  to:  'profile#show'
       patch 'users/me',   to:  'profile#update'
+      post 'users/me/avatar', to: 'profile#avatar'
       post 'tasks' ,    to:  'tasks#create'
       get 'tasks',   to: 'tasks#index'
       get 'tasks/:id', to: 'tasks#show'
