@@ -12,8 +12,8 @@ class Api::V1::TasksController < ApiController
     end
     def index
         
-        @tasks = current_user.tasks.includes(:user)
-        render json: @tasks, status: :ok
+        @pagy, @tasks = pagy(current_user.tasks.includes(:user))
+       render json: { tasks: @tasks, meta: pagy_metadata(@pagy) }, status: :ok
     end
     def show
         task_params = params.expect(:id)

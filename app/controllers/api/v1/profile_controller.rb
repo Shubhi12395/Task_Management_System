@@ -1,4 +1,4 @@
-class Api::V1::ProfileController < ApplicationController
+class Api::V1::ProfileController < ApiController
   def show
     render json: { 
     id: @current_user.id,

@@ -10,6 +10,13 @@ class Task < ApplicationRecord
   
   validate :due_date_must_be_in_the_future
   
+  def self.ransackable_associations(auth_object = nil)
+    ["user"]
+  end
+  
+  def self.ransackable_attributes(auth_object = nil)
+    ["completed", "created_at", "description", "due_date", "id", "id_value", "priority", "title", "updated_at", "user_id"]
+  end
   private
   
   def due_date_must_be_in_the_future

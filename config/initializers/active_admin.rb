@@ -5,8 +5,8 @@ ActiveAdmin.setup do |config|
   # for each of the active admin pages.
   #
   config.site_title = "Task Manager"
- 
-config.before_action do
+  
+  config.before_action do
     if respond_to?(:skip_before_action)
       skip_before_action :authorize_request, raise: false
       skip_before_action :verify_authenticity_token, raise: false
@@ -348,7 +348,10 @@ config.before_action do
   # You can inherit it with own class and inject it for all resources
   #
   # config.order_clause = MyOrderClause
-  
+  config.authentication_method = :authenticate_admin_user!
+  config.current_user_method = :current_admin_user
+  config.authentication_method = false
+  config.current_user_method   = false
   # == Webpacker
   #
   # By default, Active Admin uses Sprocket's asset pipeline.
@@ -362,16 +365,4 @@ end
 # Paste this at the absolute bottom of config/initializers/active_admin.rb
 # (Make sure it is outside of the ActiveAdmin.setup block)
 
-Rails.application.config.to_prepare do
-  # This targets the main ActiveAdmin dashboard controller base
-  ActiveAdmin::BaseController.class_eval do
-    skip_before_action :authorize_request, raise: false
-  end
-
-  # This targets the ActiveAdmin login page controller base
-  ActiveAdmin::Devise::SessionsController.class_eval do
-    skip_before_action :verify_authenticity_token, raise: false
-    skip_before_action :authorize_request, raise: false
-  end
-end
 

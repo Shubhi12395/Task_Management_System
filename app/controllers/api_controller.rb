@@ -1,4 +1,5 @@
 class ApiController < ActionController::API
+  include Pagy::Backend
   before_action :authorize_request
   attr_reader :current_user 
 

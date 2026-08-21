@@ -36,9 +36,12 @@ gem "byebug"
 
 gem 'activeadmin'
 gem 'devise'
-
+gem 'dartsass-rails'
+gem 'cancancan'
+gem 'draper'
+gem 'pagy', '~> 9.3'
+gem 'pundit'
 gem 'active_model_serializers'
-
 # Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
 gem "kamal", require: false
 
@@ -47,6 +50,7 @@ gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
+gem 'dotenv-rails', '>= 2.1.1'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
