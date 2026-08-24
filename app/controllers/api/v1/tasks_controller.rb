@@ -13,7 +13,7 @@ class Api::V1::TasksController < ApiController
     def index
         
         @pagy, @tasks = pagy(current_user.tasks.includes(:user))
-       render json: { tasks: @tasks, meta: pagy_metadata(@pagy) }, status: :ok
+        render json: { tasks: @tasks, meta: pagy_metadata(@pagy) }, status: :ok
     end
     def show
         task_params = params.expect(:id)
@@ -28,7 +28,7 @@ class Api::V1::TasksController < ApiController
         task = @current_user.tasks.includes(:user)
         @task = task.find(params[:id])
         
-        if @task.update(taskupdate_params)
+        if @task.update(task_params)
             render json: 
             { message: 'Task updated successfully',
             task: @task }, status: :ok
@@ -54,10 +54,7 @@ class Api::V1::TasksController < ApiController
     private
     
     def task_params
-        params.require(:task).permit(:title, :description, :completed, :priority, :user_id, :due_date)
+        params.require(:task).permit(:title, :description, :completed, :priority, :due_date)
     end  
-    def taskupdate_params
-        params.permit(:title, :description, :completed, :priority, :due_date)
-    end
 end
 

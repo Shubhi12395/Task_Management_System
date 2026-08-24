@@ -42,6 +42,7 @@ gem 'draper'
 gem 'pagy', '~> 9.3'
 gem 'pundit'
 gem 'active_model_serializers'
+
 # Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
 gem "kamal", require: false
 
@@ -55,7 +56,9 @@ gem 'dotenv-rails', '>= 2.1.1'
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
-  
+  gem 'rspec-rails'
+   gem 'rails-controller-testing'
+  gem 'factory_bot_rails'
   # Audits gems for known security defects (use config/bundler-audit.yml to ignore issues)
   gem "bundler-audit", require: false
   
@@ -75,4 +78,6 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem 'simplecov', '>= 0.12.0'
+  
 end

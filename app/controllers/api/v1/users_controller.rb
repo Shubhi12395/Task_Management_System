@@ -8,7 +8,7 @@ class Api::V1::UsersController < ApiController
       token = JsonWebToken.encode(user_id: @user.id)
        UserMailer.with(user: @user).welcome_email.deliver_later
       render json: { 
-      message: 'User created amd mail sent successfully', 
+      message: 'User created and mail sent successfully', 
       token: token,
       user: { id: @user.id, name: @user.name, email: @user.email, } 
       }, status: :created

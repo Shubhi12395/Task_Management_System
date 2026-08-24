@@ -13,16 +13,17 @@ class Api::V1::ProfileController < ApiController
       render json: { errors: @current_user.errors.full_messages }, status: :unprocessable_entity
     end
   end
-  def avatar
-    if @current_user.avatar.attach(params[:avatar])
-      render json: {
+def avatar
+  if params[:avatar].present? && @current_user.avatar.attach(params[:avatar])
+    render json: {
       message: "Avatar uploaded successfully",
       avatar:  rails_blob_url(@current_user.avatar)
-      }, status: :ok
-    else
-      render json: { errors: "Failed to save avatar attachment" }, status: :unprocessable_entity
-    end
+    }, status: :ok
+  else
+    render json: { errors: "Failed to save avatar attachment" }, status: :unprocessable_entity
   end
+end
+
   
   private
   

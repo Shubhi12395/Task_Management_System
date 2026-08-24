@@ -19,7 +19,6 @@ ActiveAdmin.register_page "Dashboard" do
         end
       end
       
-      
       column do
         panel "total tasks" do
           Task.count
@@ -32,7 +31,7 @@ ActiveAdmin.register_page "Dashboard" do
       end
       column do
         panel "overdue task" do
-          Task.where(completed: false).count
+          Task.where("due_date<?",Date.current).count
         end
       end
     end
@@ -47,7 +46,7 @@ ActiveAdmin.register_page "Dashboard" do
           end
         end
       end
-  
+      
       column do
         panel "Recent Tasks" do
           table_for Task.order(created_at: :desc).limit(5) do

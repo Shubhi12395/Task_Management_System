@@ -350,8 +350,6 @@ ActiveAdmin.setup do |config|
   # config.order_clause = MyOrderClause
   config.authentication_method = :authenticate_admin_user!
   config.current_user_method = :current_admin_user
-  config.authentication_method = false
-  config.current_user_method   = false
   # == Webpacker
   #
   # By default, Active Admin uses Sprocket's asset pipeline.
