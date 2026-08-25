@@ -1,10 +1,9 @@
 class Api::V1::TasksController < ApiController
     def create
-        task = Task.new(task_params)
+        task = current_user.tasks.new(task_params)
         if task.save
             render json: { 
-            message: 'Task created successfully', 
-            task: { task_id: task.id, title:task.title, description: task.description, completed: task.completed, priority: task.priority, user_id: task.user_id, due_date: task.due_date} 
+            message: 'Task created successfully', task: task 
             }, status: :created
         else
             render json: { errors: task.errors.full_messages }, status: :unprocessable_entity
@@ -12,12 +11,12 @@ class Api::V1::TasksController < ApiController
     end
     def index
         
-        @pagy, @tasks = pagy(current_user.tasks.includes(:user))
+        @pagy, @tasks = pagy(current_user.tasks)
         render json: { tasks: @tasks, meta: pagy_metadata(@pagy) }, status: :ok
     end
     def show
         task_params = params.expect(:id)
-        task = @current_user.tasks.includes(:user)
+        task = @current_user.tasks
         @task=task.find(task_params)
         
         render json: @task, status: :ok
@@ -25,7 +24,7 @@ class Api::V1::TasksController < ApiController
         render json: { error: "Task not found" }, status: :not_found
     end
     def update
-        task = @current_user.tasks.includes(:user)
+        task = @current_user.tasks
         @task = task.find(params[:id])
         
         if @task.update(task_params)
@@ -35,9 +34,11 @@ class Api::V1::TasksController < ApiController
         else
             render json: @task.errors, status: :unprocessable_entity
         end
+        rescue ActiveRecord::RecordNotFound
+        render json: { error: "Task not found" }, status: :not_found
     end
     def destroy
-        task = @current_user.tasks.includes(:user)
+        task = @current_user.tasks
         @task = task.find(params[:id])
         if @task.destroy
             render json: 
@@ -54,7 +55,7 @@ class Api::V1::TasksController < ApiController
     private
     
     def task_params
-        params.require(:task).permit(:title, :description, :completed, :priority, :due_date)
+        params.require(:task).permit(:title, :description, :completed,:priority, :due_date)
     end  
 end
 

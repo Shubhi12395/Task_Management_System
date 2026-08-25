@@ -51,7 +51,6 @@ RSpec.describe "Users", type: :request do
       end
     end
     
-    # 6. FIXED: Wrapped this orphan 'it' block inside a proper context or left it under describe block safely
     context "with invalid credentials" do
       it "returns a 401 unauthorized status for a non-existent email" do
         post login_url, params: { email: "nobody@example.com", password: "password123" }
@@ -65,7 +64,6 @@ RSpec.describe "Users", type: :request do
   end
 
   describe "DELETE /api/v1/auth/logout" do
-    # 7. FIXED: Removed redundant let!(:user) since it is already declared globally at the top
     let(:token) { JsonWebToken.encode(user_id: user.id) }
     let(:headers) { { "Authorization" => "Bearer #{token}" } }
 

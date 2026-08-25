@@ -94,6 +94,9 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
+    acts_as_paranoid (0.11.0)
+      activerecord (>= 6.1, < 8.2)
+      activesupport (>= 6.1, < 8.2)
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
     arbre (1.7.0)
@@ -558,6 +561,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers
   activeadmin
+  acts_as_paranoid
   bcrypt
   bootsnap
   brakeman
@@ -612,6 +616,7 @@ CHECKSUMS
   activerecord (8.1.3.1) sha256=0a2fb6c28f4938f6b013a3a549bec0a7e37d535f3dc8990e804bcc3258c0403b
   activestorage (8.1.3.1) sha256=f555254f387b1cffa499d2fd3115d12635eadc5b15206a8534316a67036163ef
   activesupport (8.1.3.1) sha256=85458765f25ea48b9019c46b6bb3fa5683197bf4280d9f06710a6e8d7a831376
+  acts_as_paranoid (0.11.0) sha256=8fae9e408f739d8ad840b02dde18beb364a897f6b57ee25ef1c52efa8bc906db
   addressable (2.9.0) sha256=7fdf6ac3660f7f4e867a0838be3f6cf722ace541dd97767fa42bc6cfa980c7af
   arbre (1.7.0) sha256=20c76c26390924422407aa8eb849ae859b903a95bb9c19eb2f8e05fe1e40c83d
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383

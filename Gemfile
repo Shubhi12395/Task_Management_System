@@ -42,7 +42,7 @@ gem 'draper'
 gem 'pagy', '~> 9.3'
 gem 'pundit'
 gem 'active_model_serializers'
-
+gem 'acts_as_paranoid'
 # Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
 gem "kamal", require: false
 
