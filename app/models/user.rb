@@ -4,7 +4,7 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :email, presence: true,uniqueness: true
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }, allow_nil: false
+  validates :password, length: { minimum: 6 }, allow_nil: true
   def self.ransackable_associations(auth_object = nil)
     ["tasks", "avatar_attachment", "avatar_blob"]
   end

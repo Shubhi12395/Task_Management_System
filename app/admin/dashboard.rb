@@ -43,6 +43,7 @@ ActiveAdmin.register_page "Dashboard" do
             column :name
             column :email
             column :created_at
+            column :failed_attempts
           end
         end
       end

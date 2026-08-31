@@ -1,4 +1,6 @@
 ActiveAdmin.register User do
+
+
   actions :all 
   index do
     selectable_column
@@ -7,6 +9,7 @@ ActiveAdmin.register User do
     column :email
     column :created_at
     column :updated_at
+    column :failed_attempts
     actions
   end
 
@@ -17,6 +20,7 @@ ActiveAdmin.register User do
       row :email
       row :created_at
       row :updated_at
+      row :failed_attempts
     end
     active_admin_comments
   end
@@ -29,11 +33,12 @@ ActiveAdmin.register User do
     f.inputs 'User Details' do
       f.input :name
       f.input :email
-      f.input :password              
+      f.input :password   
+      f.input :failed_attempts           
     end
     f.actions
   end
-  permit_params :name, :email, :password
+  permit_params :name, :email, :password, :failed_attempts
   
   controller do
     def update

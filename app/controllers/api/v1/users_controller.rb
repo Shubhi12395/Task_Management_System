@@ -6,7 +6,7 @@ class Api::V1::UsersController < ApiController
     @user = User.new(user_params)
     if @user.save
       token = JsonWebToken.encode(user_id: @user.id)
-       UserMailer.with(user: @user).welcome_email.deliver_later
+      UserMailer.with(user: @user).welcome_email.deliver_later
       render json: { 
       message: 'User created and mail sent successfully', 
       token: token,
@@ -18,28 +18,35 @@ class Api::V1::UsersController < ApiController
   end
   
   def login
-    #  byebug
-    
     user = User.find_by(email: params[:email])
-    if user&.authenticate(params[:password])
-      token=JsonWebToken.encode(user_id: user.id)
-      render json: {
-      message: "login successfully",
-      token: token
-      }, status: :ok
-    else 
-      render json: {
-      error: "invalid email and password"
-      }, status: :unauthorized
+    if user.failed_attempts<5
+      if user&.authenticate(params[:password])
+        token=JsonWebToken.encode(user_id: user.id)
+        # byebug
+        user.update!(failed_attempts: 0) 
+        render json: {
+        message: "login successfully", attempts: user.failed_attempts,
+        token: token
+        }, status: :ok
+      else 
+        user.increment!(:failed_attempts)  
+        render json: {
+        error: "invalid email and password", attempts: user.failed_attempts
+        } ,status: :unauthorized
+      end
+      
+    else
+      render json: { message: "account locked due to maximum attempts failed"}
     end
   end
+  
   def logout
+    render json: { 
+    message: 'User logout successfully' 
+    }, status: :ok
     
-      render json: { 
-      message: 'User logout successfully' 
-      }, status: :ok
-   
   end
+  
   private
   
   def user_params

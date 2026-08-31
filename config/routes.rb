@@ -11,7 +11,9 @@ Rails.application.routes.draw do
       post 'users/me/avatar', to: 'profile#avatar'
       post 'tasks' ,    to:  'tasks#create'
       get 'tasks',   to: 'tasks#index'
+      get 'tasks/sortby/:sort',   to: 'tasks#index'
       get 'tasks/:id', to: 'tasks#show'
+      get 'tasks/searchby/:title', to: 'tasks#show'
       patch 'tasks/:id', to: 'tasks#update'
       delete 'tasks/:id', to: 'tasks#destroy'
     end 

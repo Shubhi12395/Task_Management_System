@@ -33,7 +33,7 @@ gem "solid_cable"
 gem "bootsnap", require: false
 
 gem "byebug"
-
+gem 'bullet'
 gem 'activeadmin'
 gem 'devise'
 gem 'dartsass-rails'

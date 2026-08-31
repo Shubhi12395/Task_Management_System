@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_25_100236) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_31_112237) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -69,7 +69,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_25_100236) do
   end
 
   create_table "tasks", force: :cascade do |t|
-    t.boolean "completed"
+    t.boolean "completed", default: false
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
     t.text "description"
@@ -84,6 +84,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_25_100236) do
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
+    t.integer "failed_attempts", default: 0
     t.string "name"
     t.string "password_digest"
     t.datetime "updated_at", null: false

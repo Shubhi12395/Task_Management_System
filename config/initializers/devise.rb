@@ -200,35 +200,35 @@ Devise.setup do |config|
   # :none            = No lock strategy. You should handle locking by yourself.
   # config.lock_strategy = :failed_attempts
 
-  # Defines which key will be used when locking and unlocking an account
-  # config.unlock_keys = [:email]
+  # # Defines which key will be used when locking and unlocking an account
+  # # config.unlock_keys = :none
 
-  # Defines which strategy will be used to unlock an account.
-  # :email = Sends an unlock link to the user email
-  # :time  = Re-enables login after a certain amount of time (see :unlock_in below)
-  # :both  = Enables both strategies
-  # :none  = No unlock strategy. You should handle unlocking by yourself.
-  # config.unlock_strategy = :both
+  # # Defines which strategy will be used to unlock an account.
+  # # :email = Sends an unlock link to the user email
+  # # :time  = Re-enables login after a certain amount of time (see :unlock_in below)
+  # # :both  = Enables both strategies
+  # # :none  = No unlock strategy. You should handle unlocking by yourself.
+  # config.unlock_strategy = :none
 
-  # Number of authentication tries before locking an account if lock_strategy
-  # is failed attempts.
-  # config.maximum_attempts = 20
+  # # Number of authentication tries before locking an account if lock_strategy
+  # # is failed attempts.
+  # config.maximum_attempts = 5
 
-  # Time interval to unlock the account if :time is enabled as unlock_strategy.
+  # # Time interval to unlock the account if :time is enabled as unlock_strategy.
   # config.unlock_in = 1.hour
 
-  # Warn on the last attempt before the account is locked.
+  # # Warn on the last attempt before the account is locked.
   # config.last_attempt_warning = true
 
-  # ==> Configuration for :recoverable
-  #
-  # Defines which key will be used when recovering the password for an account
-  # config.reset_password_keys = [:email]
+  # # ==> Configuration for :recoverable
+  # #
+  # # Defines which key will be used when recovering the password for an account
+  # # config.reset_password_keys = [:email]
 
-  # Time interval you can reset your password with a reset password key.
-  # Don't put a too small interval or your users won't have the time to
-  # change their passwords.
-  config.reset_password_within = 6.hours
+  # # Time interval you can reset your password with a reset password key.
+  # # Don't put a too small interval or your users won't have the time to
+  # # change their passwords.
+  # config.reset_password_within = 6.hours
 
   # When set to false, does not sign a user in automatically after their password is
   # reset. Defaults to true, so a user is signed in automatically after a reset.
