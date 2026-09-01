@@ -7,7 +7,7 @@ class JsonWebToken
   end
 
   def self.decode(token)
-    decoded = JWT.decode(token, SECRET_KEY,true,{alogrithm:'HS256'})[0]
+    decoded = JWT.decode(token, SECRET_KEY,true,{algorithm:'HS256'})[0]
     HashWithIndifferentAccess.new(decoded)
   rescue
   # 

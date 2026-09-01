@@ -5,7 +5,6 @@ RSpec.describe "Tasks", type: :request do
   let(:token) { JsonWebToken.encode(user_id: user.id) }
   let(:valid_headers) { { "Authorization" => "Bearer #{token}" } }
   let(:invalid_headers) { { "Authorization" => "Bearer invalid_token_here" } }
-  
   def json_response
     JSON.parse(response.body)
   end
@@ -18,7 +17,7 @@ RSpec.describe "Tasks", type: :request do
           description: "blood bank management system", 
           completed: true, 
           priority: "medium", 
-          due_date: "30/08/2026" 
+          due_date: "07/09/2026" 
         } 
       }
     end
@@ -77,6 +76,35 @@ RSpec.describe "Tasks", type: :request do
       end
     end
   end 
+  describe "GET /api/v1/tasks/sortby/:sort" do 
+    let!(:user_tasks) { create_list(:task, 25, user: user) }
+    let!(:other_task) { create(:task) } 
+
+    context "with a valid JWT token" do
+      it "shows task with valid web token" do
+        get '/api/v1/tasks/sortby/:sort', headers: valid_headers
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "paginates the tasks and returns the Pagy 'meta' key" do
+        get '/api/v1/tasks/sortby/:sort', headers: valid_headers
+        expect(json_response).to have_key('meta')
+        expect(json_response.dig('meta', 'count')).to eq(25)
+      end
+    end
+
+    context "without a valid JWT token" do
+      it "returns a 401 unauthorized status" do
+        get '/api/v1/tasks/sortby/:sort', headers: invalid_headers
+        expect(response).to have_http_status(:unauthorized) 
+      end
+      
+      it "returns 401 unauthorized if headers are completely missing" do
+        get '/api/v1/tasks/sortby/:sort', headers: {}
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end 
 
   describe "GET /api/v1/tasks/:id" do
     let!(:my_task) { create(:task, user: user) }
@@ -122,6 +150,50 @@ RSpec.describe "Tasks", type: :request do
       end
     end
   end
+describe "GET /api/v1/tasks/searchby/:title" do
+    let!(:my_task) { create(:task,title: "Unique Assignment Title", user: user) }
+    let!(:someone_elses_task) { create(:task, title: "Secret Assignment Title") } 
+
+    context "with a valid JWT token" do
+      context "when the task belongs to the user" do
+        it "returns the task details successfully" do
+          get "/api/v1/tasks/searchby/#{ERB::Util.url_encode(my_task.title)}", headers: valid_headers
+          
+          expect(response).to have_http_status(:ok)
+          expect(json_response['id']).to eq(my_task.id)
+          expect(json_response['title']).to eq(my_task.title)
+          expect(json_response['description']).to eq(my_task.description)
+          expect(json_response['completed']).to eq(my_task.completed)
+          expect(json_response['priority']).to eq(my_task.priority)
+        end
+      end
+      
+      context "when the task belongs to a different user" do
+        it "returns a 404 not found status" do
+          get "/api/v1/tasks/searchby/rails", headers: valid_headers
+          
+          expect(response).to have_http_status(:not_found)
+          expect(json_response['error']).to eq("Task not found")
+        end
+      end
+      
+      context "when the task ID does not exist at all" do
+        it "returns a 404 not found status" do
+          get "/api/v1/tasks/rails", headers: valid_headers
+          
+          expect(response).to have_http_status(:not_found)
+          expect(json_response['error']).to eq("Task not found")
+        end
+      end
+    end
+    
+    context "without a valid JWT token" do
+      it "returns a 401 unauthorized status" do
+        get "/api/v1/tasks/searchby/:title", headers: invalid_headers
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 
   describe "PUT/PATCH /api/v1/tasks/:id" do
     let!(:my_task) { create(:task, user: user) }
@@ -134,7 +206,7 @@ RSpec.describe "Tasks", type: :request do
           description: "blood bank management system", 
           completed: true, 
           priority: "medium", 
-          due_date: "30/08/2026" 
+          due_date: "07/09/2026" 
         } 
       }
     end

@@ -1,8 +1,6 @@
 class Task < ApplicationRecord
   acts_as_paranoid
-  belongs_to :user 
-  before_update :prevent_update
-  
+  belongs_to :user  
   validates :title, presence: true
   validates :description,presence: true, length: { minimum: 10 }
   
@@ -23,15 +21,9 @@ class Task < ApplicationRecord
   private
   
   def due_date_must_be_in_the_future
-    if due_date < Time.zone.today
+    if due_date_changed? && due_date.present? && due_date < Time.zone.today
       errors.add(:due_date, "can't be in the past")
     end
   end
   
-  def prevent_update
-     if due_date_in_database.present? && due_date_in_database < Date.current
-    errors.add(:base, "This task cannot be updated as due date is passed.")
-    throw(:abort) 
-     end
-  end
 end

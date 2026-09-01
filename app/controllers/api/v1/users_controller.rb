@@ -19,24 +19,30 @@ class Api::V1::UsersController < ApiController
   
   def login
     user = User.find_by(email: params[:email])
-    if user.failed_attempts<5
-      if user&.authenticate(params[:password])
-        token=JsonWebToken.encode(user_id: user.id)
-        # byebug
-        user.update!(failed_attempts: 0) 
-        render json: {
-        message: "login successfully", attempts: user.failed_attempts,
-        token: token
-        }, status: :ok
-      else 
-        user.increment!(:failed_attempts)  
-        render json: {
-        error: "invalid email and password", attempts: user.failed_attempts
-        } ,status: :unauthorized
-      end
-      
+    if user == nil
+      render json: {
+      message: "Invalid email"
+      } ,status: :unprocessable_entity
     else
-      render json: { message: "account locked due to maximum attempts failed"}
+      if user.failed_attempts<5
+        if user&.authenticate(params[:password])
+          token=JsonWebToken.encode(user_id: user.id)
+          # byebug
+          user.update!(failed_attempts: 0) 
+          render json: {
+          message: "login successfully",
+          token: token
+          }, status: :ok
+        else 
+          user.increment!(:failed_attempts)  
+          render json: {
+          error: "please enter correct password", attempts: user.failed_attempts
+          } ,status: :unauthorized
+        end
+        
+      else
+        render json: { message: "account locked due to maximum attempts failed"}, status: :too_many_requests
+      end
     end
   end
   

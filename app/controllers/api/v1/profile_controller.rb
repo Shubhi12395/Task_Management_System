@@ -1,5 +1,5 @@
 class Api::V1::ProfileController < ApiController
-
+  
   def show
     render json: { 
     id: @current_user.id,
@@ -28,7 +28,6 @@ class Api::V1::ProfileController < ApiController
   end
   
   private
-  
   def user_params
     params.require(:user).permit(:name, :email,)
   end

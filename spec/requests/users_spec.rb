@@ -53,12 +53,12 @@ RSpec.describe "Users", type: :request do
     
     context "with invalid credentials" do
       it "returns a 401 unauthorized status for a non-existent email" do
-        post login_url, params: { email: "nobody@example.com", password: "password123" }
+        post login_url, params: { email: "noexistemail.com", password: "password123" }
         
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:unprocessable_content)
         
         json_response = JSON.parse(response.body)
-        expect(json_response['error']).to eq("invalid email and password")
+        expect(json_response['message']).to eq("Invalid email")
       end
     end
   end
