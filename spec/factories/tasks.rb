@@ -6,5 +6,6 @@ FactoryBot.define do
         completed  {true}
         priority  {"low"}
         due_date {Time.zone.today + 6.days}
+        deleted_at {nil}
     end
 end

@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  acts_as_paranoid
   has_many :tasks, dependent: :destroy
   has_one_attached :avatar
   validates :name, presence: true
