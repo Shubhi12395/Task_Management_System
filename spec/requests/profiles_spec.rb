@@ -6,19 +6,19 @@ RSpec.describe "Profiles", type: :request do
   let(:token) { JsonWebToken.encode(user_id: user.id) }
   let(:headers) { { "Authorization" => "Bearer #{token}" } }
 
-  describe "GET /api/v1/users/me" do 
+  describe "GET /api/v1/users/me" do
     it "successfully shows the user profile" do
       get '/api/v1/users/me', headers: headers
-      
+
       expect(response).to have_http_status(:ok)
       json_response = JSON.parse(response.body)
     end
   end
 
-  describe "PATCH /api/v1/users/me" do 
+  describe "PATCH /api/v1/users/me" do
     it "successfully updates the profile" do
-      patch '/api/v1/users/me', params: { user: { name: "shubhi", email: "shubhi2345@gmail.com" , password: "shubhi1234"} }, headers: headers
-      
+      patch '/api/v1/users/me', params: { user: { name: "shubhi", email: "shubhi2345@gmail.com", password: "shubhi1234" } }, headers: headers
+
       expect(response).to have_http_status(:ok)
       json_response = JSON.parse(response.body)
       expect(json_response['message']).to eq("Profile updated successfully")
@@ -26,15 +26,15 @@ RSpec.describe "Profiles", type: :request do
 
     it "returns error when invalid details are entered" do
 patch '/api/v1/users/me', params: { user: { name: "" } }, headers: headers
-      
+
       expect(response).to have_http_status(:unprocessable_content)
-      
+
       json_response = JSON.parse(response.body)
-      expect(json_response['errors']).to be_present 
+      expect(json_response['errors']).to be_present
     end
   end
 
-  describe "POST /api/v1/users/me/avatar" do 
+  describe "POST /api/v1/users/me/avatar" do
     context "with a valid image file file upload" do
       let(:file) { fixture_file_upload('test_avatar.png', 'image/png') }
 
@@ -42,7 +42,7 @@ patch '/api/v1/users/me', params: { user: { name: "" } }, headers: headers
         post '/api/v1/users/me/avatar', params: { avatar: file }, headers: headers
 
         expect(response).to have_http_status(:ok)
-        
+
         json_response = JSON.parse(response.body)
         expect(json_response['message']).to eq("Avatar uploaded successfully")
         expect(json_response['avatar']).to be_present
@@ -55,7 +55,7 @@ patch '/api/v1/users/me', params: { user: { name: "" } }, headers: headers
         post '/api/v1/users/me/avatar', params: { avatar: nil }, headers: headers
 
         expect(response).to have_http_status(:unprocessable_content)
-        
+
         json_response = JSON.parse(response.body)
         expect(json_response['errors']).to eq("Failed to save avatar attachment")
       end

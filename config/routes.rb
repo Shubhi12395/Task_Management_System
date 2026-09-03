@@ -3,19 +3,21 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   namespace :api do
     namespace :v1 do
-      post 'auth/signup', to: 'users#create'
-      post 'auth/login', to: 'users#login'
-      delete 'auth/logout', to: 'users#logout' 
-      get  'users/me',  to:  'profile#show'
-      patch 'users/me',   to:  'profile#update'
-      post 'users/me/avatar', to: 'profile#avatar'
-      post 'tasks' ,    to:  'tasks#create'
-      get 'tasks',   to: 'tasks#index'
-      get 'tasks/sortby/:sort',   to: 'tasks#index'
-      get 'tasks/:id', to: 'tasks#show'
-      get 'tasks/searchby/:title', to: 'tasks#show'
-      patch 'tasks/:id', to: 'tasks#update'
-      delete 'tasks/:id', to: 'tasks#destroy'
-    end 
+      post "auth/signup", to: "users#create"
+      post "auth/login", to: "users#login"
+      delete "auth/logout", to: "users#logout"
+      get "users/me",  to:  "profile#show"
+      patch "users/me",   to:  "profile#update"
+      post "users/me/avatar", to: "profile#avatar"
+      post "tasks",    to:  "tasks#create"
+      get "tasks",   to: "tasks#index"
+      get "tasks/:id", to: "tasks#show"
+      get "tasks/sortby/:sort",   to: "tasks#sort"
+      get "tasks/searchby/:search", to: "tasks#search"
+      patch "tasks/:id", to: "tasks#update"
+      patch "tasks", to: "tasks#update_all"
+      delete "tasks/:id", to: "tasks#destroy"
+      delete "tasks", to: "tasks#destroy_all"
+    end
   end
 end

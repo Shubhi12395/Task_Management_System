@@ -1,7 +1,5 @@
 ActiveAdmin.register User do
-
-
-  actions :all 
+  actions :all
   index do
     selectable_column
     id_column
@@ -30,16 +28,16 @@ ActiveAdmin.register User do
   #
   # Uncomment all parameters which should be permitted for assignment
   form do |f|
-    f.inputs 'User Details' do
+    f.inputs "User Details" do
       f.input :name
       f.input :email
-      f.input :password   
-      f.input :failed_attempts           
+      f.input :password
+      f.input :failed_attempts
     end
     f.actions
   end
   permit_params :name, :email, :password, :failed_attempts
-  
+
   controller do
     def update
       if params[:user][:password].blank?
@@ -47,10 +45,9 @@ ActiveAdmin.register User do
       end
       super
     end
-    
   end
-  
-  
+
+
   # or
   #
   # permit_params do
