@@ -2,8 +2,8 @@ class Api::V1::TasksController < ApiController
   def create
     task = current_user.tasks.new(task_params)
     if task.save
-      render json: {
-      message: "Task created successfully", task: TaskSerializer.new(task)
+      render json: { 
+      message: 'Task created successfully', task: task 
       }, status: :created
     else
       render json: { errors: task.errors.full_messages }, status: :unprocessable_entity
@@ -11,20 +11,15 @@ class Api::V1::TasksController < ApiController
   end
 
   def index
-    @pagy, @tasks = pagy(current_user.tasks.includes(:user))
-    render json:  {tasks: @tasks, meta: pagy_metadata(@pagy), status: :ok}
-  end
-
-  def sort
-    @pagy, @tasks = pagy(current_user.tasks.includes(:user))
-    if params[:sort] == "priority"
+    @pagy, @tasks = pagy(current_user.tasks)
+    if params[:sort] == 'priority'
       # @tasks =@tasks.in_order_of(:priority, %w(high medium low))
       @tasks=@tasks.sort_by { |task| [ "high", "medium", "low" ].index(task.priority) }
     end
     if params[:sort] == "due_date"
       @tasks=@tasks.order(due_date: :asc)
     end
-    render json: {tasks: @tasks, meta: pagy_metadata(@pagy)}, status: :ok
+    render json: { tasks: @tasks, each_serializer: TaskSerializer, meta: pagy_metadata(@pagy) }, status: :ok
   end
 
   def show
@@ -33,23 +28,16 @@ class Api::V1::TasksController < ApiController
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Task not found" }, status: :not_found
   end
-
-  def search
-    @task=@current_user.tasks.where("title ILIKE ? OR description ILIKE ?",  "#{params[:search]}%", "#{params[:search]}%")
-    if @task.empty?
-      render json: { error: "Task not found" }, status: :not_found
-    else
-      render json: @task, status: :ok
-    end
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: "Task not found" }, status: :not_found
-  end
-
+  
   def update
-    @task = @current_user.tasks.find(params[:id])
 
+    task = @current_user.tasks
+    @task = task.find(params[:id])
+    
     if @task.update(task_params)
-      render json: { message: "Task updated successfully", task: TaskSerializer.new(@task) }, status: :ok
+      render json: 
+      { message: 'Task updated successfully',
+      task: @task }, status: :ok
     else
       render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
     end
