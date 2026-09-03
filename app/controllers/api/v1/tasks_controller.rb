@@ -12,7 +12,7 @@ class Api::V1::TasksController < ApiController
 
   def index
     @pagy, @tasks = pagy(current_user.tasks.includes(:user))
-    render json:  @tasks, meta: pagy_metadata(@pagy), status: :ok
+    render json:  {tasks: @tasks, meta: pagy_metadata(@pagy), status: :ok}
   end
 
   def sort
@@ -24,7 +24,7 @@ class Api::V1::TasksController < ApiController
     if params[:sort] == "due_date"
       @tasks=@tasks.order(due_date: :asc)
     end
-    render json: @tasks, meta: pagy_metadata(@pagy), status: :ok
+    render json: {tasks: @tasks, meta: pagy_metadata(@pagy)}, status: :ok
   end
 
   def show
