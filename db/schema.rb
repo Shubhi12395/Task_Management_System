@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_02_111721) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_07_125219) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -68,17 +68,41 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_111721) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
-  create_table "tasks", force: :cascade do |t|
-    t.boolean "completed", default: false
+  create_table "comments", force: :cascade do |t|
+    t.bigint "commentable_id", null: false
+    t.string "commentable_type", null: false
+    t.text "content"
     t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "deleted_at"
+    t.string "description"
+    t.date "due_date"
+    t.string "name"
+    t.integer "status"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_projects_on_user_id"
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.bigint "assignee_id"
+    t.date "completed_at"
+    t.datetime "created_at", null: false
+    t.bigint "creator_id"
     t.datetime "deleted_at"
     t.text "description"
     t.date "due_date", default: -> { "(CURRENT_DATE + 'P7D'::interval)" }
     t.string "priority"
+    t.bigint "project_id"
+    t.integer "status", default: 0
     t.string "title"
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.index ["user_id"], name: "index_tasks_on_user_id"
+    t.index ["project_id"], name: "index_tasks_on_project_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -93,5 +117,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_111721) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "tasks", "users"
+  add_foreign_key "projects", "users"
+  add_foreign_key "tasks", "projects"
+  add_foreign_key "tasks", "users", column: "assignee_id"
+  add_foreign_key "tasks", "users", column: "creator_id"
 end

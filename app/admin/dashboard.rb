@@ -23,8 +23,8 @@ ActiveAdmin.register_page "Dashboard" do
         end
       end
       column do
-        panel "completed task" do
-          Task.where(completed: true).count
+        panel " task status" do
+          Task.where(status: 2).count
         end
       end
       column do
@@ -54,8 +54,9 @@ ActiveAdmin.register_page "Dashboard" do
             column :description
             column :priority
             column :user_id
-            column :completed
+            column :status
             column :due_date
+            column :completed_at
           end
         end
       end
