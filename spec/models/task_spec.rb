@@ -6,59 +6,59 @@ RSpec.describe Task, type: :model do
       task = build(:task)
       expect(task).to be_valid
     end
-    
+
     it 'is invalid without a title' do
       task = build(:task, title: nil)
       expect(task).not_to be_valid
       expect(task.errors[:title]).to include("can't be blank")
     end
-    
+
     it 'is invalid with a description shorter than 10 characters' do
       task = build(:task, description: 'Short')
       expect(task).not_to be_valid
       expect(task.errors[:description]).to include("is too short (minimum is 10 characters)")
     end
-    
+
     it 'is valid when completed is true or false' do
       expect(build(:task, completed: true)).to be_valid
       expect(build(:task, completed: false)).to be_valid
     end
-    
+
     it 'is invalid when completed is nil' do
       task = build(:task, completed: nil)
       expect(task).not_to be_valid
       expect(task.errors[:completed]).to include(" is not a valid completion")
     end
-    
+
     it 'is valid with high, medium, or low priorities' do
       expect(build(:task, priority: 'high')).to be_valid
       expect(build(:task, priority: 'medium')).to be_valid
       expect(build(:task, priority: 'low')).to be_valid
     end
-    
+
     it 'is invalid with an incorrect priority value' do
       task = build(:task, priority: 'urgent')
       expect(task).not_to be_valid
       expect(task.errors[:priority]).to include("urgent is not a valid priority")
     end
-    
+
     it 'is valid when due_date is in the future' do
       task = build(:task, due_date: Date.tomorrow)
       expect(task).to be_valid
     end
-    
+
     it 'is valid when due_date is today' do
       task = build(:task, due_date: Date.today)
       expect(task).to be_valid
     end
-    
+
     it 'is invalid when due_date is in the past' do
       task = build(:task, due_date: Date.yesterday)
       expect(task).not_to be_valid
       expect(task.errors[:due_date]).to include("can't be in the past")
     end
   end
-  
+
   describe 'Associations' do
     it 'belongs to a user' do
       association = Task.reflect_on_association(:user)

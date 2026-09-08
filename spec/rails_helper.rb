@@ -73,6 +73,4 @@ config.filter_rails_from_backtrace!
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 end
-
 end
-

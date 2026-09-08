@@ -9,36 +9,36 @@ RSpec.describe "Tasks", type: :request do
     JSON.parse(response.body)
   end
   
-  describe "POST /api/v1/tasks" do 
+  describe "POST /api/v1/tasks" do
     let(:valid_payload) { { task: attributes_for(:task) } }
     
     context "with a valid JWT token" do
-      it "creates a task assigned to the logged-in user" do 
+      it "creates a task assigned to the logged-in user" do
         expect {
         post '/api/v1/tasks', params: valid_payload, headers: valid_headers
-      }.to change(user.tasks, :count).by(1) 
+      }.to change(user.tasks, :count).by(1)
       expect(response).to have_http_status(:created)
       expect(json_response['message']).to eq('Task created successfully')
       expect(Task.last.user_id).to eq(user.id)
-    end 
+    end
   end
   
   context "without a valid JWT token" do
     it "returns a 401 unauthorized status" do
       post '/api/v1/tasks', params: valid_payload, headers: invalid_headers
-      expect(response).to have_http_status(:unauthorized) 
+      expect(response).to have_http_status(:unauthorized)
     end
     
     it "returns 401 unauthorized if headers are completely missing" do
       post '/api/v1/tasks', params: valid_payload, headers: {}
       expect(response).to have_http_status(:unauthorized)
     end
-  end 
+  end
 end
 
-describe "GET /api/v1/tasks" do 
+describe "GET /api/v1/tasks" do
   let!(:user_tasks) { create_list(:task, 25, user: user) }
-  let!(:other_task) { create(:task) } 
+  let!(:other_task) { create(:task) }
   
   context "with a valid JWT token" do
     it "shows task with valid web token" do
@@ -56,7 +56,7 @@ describe "GET /api/v1/tasks" do
   context "without a valid JWT token" do
     it "returns a 401 unauthorized status" do
       get '/api/v1/tasks', headers: invalid_headers
-      expect(response).to have_http_status(:unauthorized) 
+      expect(response).to have_http_status(:unauthorized)
     end
     
     it "returns 401 unauthorized if headers are completely missing" do
@@ -64,10 +64,10 @@ describe "GET /api/v1/tasks" do
       expect(response).to have_http_status(:unauthorized)
     end
   end
-end 
-describe "GET /api/v1/tasks/sortby/:sort" do 
+end
+describe "GET /api/v1/tasks/sortby/:sort" do
   let!(:user_tasks) { create_list(:task, 25, user: user) }
-  let!(:other_task) { create(:task) } 
+  let!(:other_task) { create(:task) }
   
   context "with a valid JWT token" do
     it "shows task with valid web token" do
@@ -85,7 +85,7 @@ describe "GET /api/v1/tasks/sortby/:sort" do
   context "without a valid JWT token" do
     it "returns a 401 unauthorized status" do
       get '/api/v1/tasks/sortby/:sort', headers: invalid_headers
-      expect(response).to have_http_status(:unauthorized) 
+      expect(response).to have_http_status(:unauthorized)
     end
     
     it "returns 401 unauthorized if headers are completely missing" do
@@ -93,11 +93,11 @@ describe "GET /api/v1/tasks/sortby/:sort" do
       expect(response).to have_http_status(:unauthorized)
     end
   end
-end 
+end
 
 describe "GET /api/v1/tasks/:id" do
   let!(:my_task) { create(:task, user: user) }
-  let!(:someone_elses_task) { create(:task) } 
+  let!(:someone_elses_task) { create(:task) }
   
   context "with a valid JWT token" do
     context "when the task belongs to the user" do
@@ -140,8 +140,8 @@ describe "GET /api/v1/tasks/:id" do
   end
 end
 describe "GET /api/v1/tasks/searchby/:title" do
-  let!(:my_task) { create(:task,title: "Unique Assignment Title", user: user) }
-  let!(:someone_elses_task) { create(:task, title: "Secret Assignment Title") } 
+  let!(:my_task) { create(:task, title: "Unique Assignment Title", user: user) }
+  let!(:someone_elses_task) { create(:task, title: "Secret Assignment Title") }
   
   context "with a valid JWT token" do
     context "when the task belongs to the user" do
@@ -186,24 +186,24 @@ end
 
 describe "PUT/PATCH /api/v1/tasks/:id" do
   let!(:my_task) { create(:task, user: user) }
-  let!(:someone_elses_task) { create(:task) } 
+  let!(:someone_elses_task) { create(:task) }
   
   let(:valid_update_params) do
-    { 
-    task: { 
-    title: "Rails Updated Assignment", 
-    description: "blood bank management system", 
-    completed: true, 
-    priority: "medium", 
-    due_date: "07/09/2026" 
-  } 
+    {
+    task: {
+    title: "Rails Updated Assignment",
+    description: "blood bank management system",
+    completed: true,
+    priority: "medium",
+    due_date: "07/09/2026"
+  }
 }
 end
 
 let(:invalid_update_params) do
   {
   task: {
-  title: "" 
+  title: ""
 }
 }
 end
@@ -260,6 +260,12 @@ context "without a valid JWT token" do
   end
 end
 end
+describe "PUT/PATCH /api/v1/tasks" do
+let!(:user_tasks) { create_list(:task, 25, user: user) }
+  let!(:other_task) { create(:task) }
+  let(:params) { valid_params_ids }
+end
+
 describe "DELETE /api/v1/tasks/:id" do
   let!(:my_task) { create(:task, user: user) }
   let!(:someone_elses_task) { create(:task) }
@@ -312,5 +318,4 @@ context "without a valid JWT token" do
   end
 end
 end
-
 end

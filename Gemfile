@@ -16,7 +16,7 @@ gem "turbo-rails"
 gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
-gem 'jwt'
+gem "jwt"
 gem "bcrypt"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
@@ -33,16 +33,16 @@ gem "solid_cable"
 gem "bootsnap", require: false
 
 gem "byebug"
-gem 'bullet'
-gem 'activeadmin'
-gem 'devise'
-gem 'dartsass-rails'
-gem 'cancancan'
-gem 'draper'
-gem 'pagy', '~> 9.3'
-gem 'pundit'
-gem 'active_model_serializers'
-gem 'acts_as_paranoid'
+gem "bullet"
+gem "activeadmin"
+gem "devise"
+gem "dartsass-rails"
+gem "cancancan"
+gem "draper"
+gem "pagy", "~> 9.3"
+gem "pundit"
+gem "active_model_serializers"
+gem "acts_as_paranoid"
 # Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
 gem "kamal", require: false
 
@@ -51,20 +51,19 @@ gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
-gem 'dotenv-rails', '>= 2.1.1'
+gem "dotenv-rails", ">= 2.1.1"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
-  gem 'rspec-rails'
-   gem 'rails-controller-testing'
-  gem 'factory_bot_rails'
+  gem "rspec-rails"
+  gem "rails-controller-testing"
+  gem "factory_bot_rails"
   # Audits gems for known security defects (use config/bundler-audit.yml to ignore issues)
   gem "bundler-audit", require: false
-  
+  gem "rubocop-rails", require: false
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
-  
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 end
@@ -78,6 +77,5 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
-  gem 'simplecov', '>= 0.12.0'
-  
+  gem "simplecov", ">= 0.12.0"
 end

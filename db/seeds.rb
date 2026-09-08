@@ -9,7 +9,7 @@
 #   end
 if Rails.env.development?
   AdminUser.find_or_create_by(email: 'admin@example.com') do |i|
-    i.password: 'password',
-    i.password_confirmation: 'password'
+    i.password = 'password'
+    i.password_confirmation = 'password'
   end
 end
