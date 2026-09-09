@@ -1,5 +1,6 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
+require 'pundit/rspec'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 # Prevent database truncation if the environment is production
@@ -72,5 +73,6 @@ config.filter_rails_from_backtrace!
 # spec/rails_helper.rb
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
+  config.infer_spec_type_from_file_location!
 end
 end

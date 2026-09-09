@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_07_125219) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_09_101624) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -97,11 +97,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_07_125219) do
     t.datetime "deleted_at"
     t.text "description"
     t.date "due_date", default: -> { "(CURRENT_DATE + 'P7D'::interval)" }
+    t.bigint "parent_id"
     t.string "priority"
     t.bigint "project_id"
     t.integer "status", default: 0
     t.string "title"
     t.datetime "updated_at", null: false
+    t.index ["parent_id"], name: "index_tasks_on_parent_id"
     t.index ["project_id"], name: "index_tasks_on_project_id"
   end
 
@@ -112,6 +114,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_07_125219) do
     t.integer "failed_attempts", default: 0
     t.string "name"
     t.string "password_digest"
+    t.string "refresh_token"
     t.datetime "updated_at", null: false
   end
 
@@ -119,6 +122,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_07_125219) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "projects", "users"
   add_foreign_key "tasks", "projects"
+  add_foreign_key "tasks", "tasks", column: "parent_id"
   add_foreign_key "tasks", "users", column: "assignee_id"
   add_foreign_key "tasks", "users", column: "creator_id"
 end

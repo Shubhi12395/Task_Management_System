@@ -33,7 +33,7 @@ Rails.application.routes.draw do
       get "projects/:id", to: "projects#show"
       patch "projects/:id", to: "projects#update"
       delete "projects/:id", to: "projects#destroy"
-      
+
       post "tasks/:task_id/comments", to: "comment#create"
       get "tasks/:task_id/comments", to: "comment#index"
       delete "tasks/:task_id/comments/:id", to: "comment#delete"

@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApiController
   skip_before_action :authorize_request, only: [ :create, :login ]
-
+  
   def create
     @user = User.new(user_params)
     if @user.save
@@ -15,7 +15,7 @@ class Api::V1::UsersController < ApiController
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end
   end
-
+  
   def login
     user = User.find_by(email: params[:email])
     if user == nil
@@ -25,11 +25,14 @@ class Api::V1::UsersController < ApiController
     else
       if user.failed_attempts<5
         if user&.authenticate(params[:password])
-          token=JsonWebToken.encode(user_id: user.id)
-          user.update!(failed_attempts: 0)
+         token = if user.refresh_token.blank?
+              JsonWebToken.encode(user_id: user.id)
+            else
+            token=user.refresh_token
+            end
+            user.update!(failed_attempts: 0, refresh_token: token)
           render json: {
-          message: "login successfully",
-          token: token
+          message: "login successfully",token: token
           }, status: :ok
         else
           user.increment!(:failed_attempts)
@@ -37,21 +40,22 @@ class Api::V1::UsersController < ApiController
           error: "please enter correct password", attempts: user.failed_attempts
           }, status: :unauthorized
         end
-
+        
       else
         render json: { message: "account locked due to maximum attempts failed" }, status: :too_many_requests
       end
     end
   end
-
+  
   def logout
+    current_user.refresh_token= NULL
     render json: {
     message: "User logout successfully"
     }, status: :ok
   end
-
+  
   private
-
+  
   def user_params
     params.require(:user).permit(:name, :email, :password,)
   end

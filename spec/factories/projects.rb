@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :project do
+    association :user
     name { "MyString" }
-    description { "MyString" }
-    status { 1 }
-    due_date { "2026-09-04" }
-    user { nil }
+    description { "MyString projects is coming" }
+    status { "in_progress" }
+    due_date { Time.zone.today + 6.days }
   end
 end

@@ -7,11 +7,11 @@ class Project < ApplicationRecord
   validates :description, presence: true, length: { minimum: 10 }
   validate :due_date_must_be_in_the_future
   def self.ransackable_associations(auth_object = nil)
-    [ "user","tasks" ]
+    [ "user", "tasks" ]
   end
-  
+
   def self.ransackable_attributes(auth_object = nil)
-    [ "status", "created_at", "description", "due_date", "id", "id_value", "name", "updated_at", "user_id"]
+    [ "status", "created_at", "description", "due_date", "id", "id_value", "name", "updated_at", "user_id" ]
   end
 
 private
