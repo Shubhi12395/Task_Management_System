@@ -6,6 +6,9 @@ Rails.application.routes.draw do
       post "auth/signup", to: "users#create"
       post "auth/login", to: "users#login"
       delete "auth/logout", to: "users#logout"
+      patch "auth/password_reset", to: "users#password_reset"
+      post "auth/forgot_password", to: "users#forgot_password"
+      patch "auth/forgot_password/reset", to: "users#forgot_pwd_reset"
 
       get "users/me",  to:  "profile#show"
       patch "users/me",   to:  "profile#update"
@@ -13,7 +16,7 @@ Rails.application.routes.draw do
 
       post "users/comments", to: "comment#create"
       get "users/comments", to: "comment#index"
-      delete "users/comments/:id", to: "comment#delete"
+      delete "users/comments/:id", to: "comment#destroy"
 
       post "tasks",    to:  "tasks#create"
       get "tasks",   to: "tasks#index"
@@ -28,6 +31,7 @@ Rails.application.routes.draw do
       patch "tasks", to: "tasks#update_all"
       delete "tasks/:id", to: "tasks#destroy"
       delete "tasks", to: "tasks#destroy_all"
+
       post "projects",    to:  "projects#create"
       get "projects",   to: "projects#index"
       get "projects/:id", to: "projects#show"
@@ -36,7 +40,7 @@ Rails.application.routes.draw do
 
       post "tasks/:task_id/comments", to: "comment#create"
       get "tasks/:task_id/comments", to: "comment#index"
-      delete "tasks/:task_id/comments/:id", to: "comment#delete"
+      delete "tasks/:task_id/comments/:id", to: "comment#destroy"
     end
   end
 end

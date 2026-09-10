@@ -1,7 +1,9 @@
 FactoryBot.define do
   factory :comment do
-    association :commentable, factory: :user
-    association :commentable, factory: :task
     content { "MyText" }
+    association :commentable, factory: :user
+    trait :for_task do
+      association :commentable, factory: :task
+    end
   end
 end

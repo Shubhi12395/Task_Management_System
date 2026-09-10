@@ -29,8 +29,12 @@ class Api::V1::CommentController < ApiController
     render json: { comments: serialized_comments, meta: pagy_metadata(@pagy) }, status: :ok
   end
 
-  def delete
-    commentable =current_user.tasks.find_by!(id: params[:task_id])
+  def destroy
+    if params[:task_id]
+    commentable =current_user.tasks.includes(:project).find_by!(id: params[:task_id])
+    else
+      commentable=current_user
+    end
     if commentable.present?
       comment = commentable.comments.find_by!(id: params[:id])
       comment.destroy

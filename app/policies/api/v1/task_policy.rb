@@ -16,6 +16,9 @@ class Api::V1::TaskPolicy < ApplicationPolicy
   def sort?
     true
   end
+  def update?
+    true
+  end
   def search?
     true
   end
@@ -37,10 +40,10 @@ class Api::V1::TaskPolicy < ApplicationPolicy
   def by_priority?
     true
   end
-  def destory?
+  def destroy?
     true
   end
-  
+
   class Scope < ApplicationPolicy::Scope
     # NOTE: Be explicit about which records you allow access to!
     # def resolve

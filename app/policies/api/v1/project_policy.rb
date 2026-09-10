@@ -16,7 +16,7 @@ class Api::V1::ProjectPolicy < ApplicationPolicy
   def update?
     true
   end
-  def destory?
+  def destroy?
     true
   end
 

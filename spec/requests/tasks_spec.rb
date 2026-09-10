@@ -234,7 +234,6 @@ context "with a valid JWT token" do
     context "with valid parameters" do
       it "updates the task and returns a success message" do
         patch "/api/v1/tasks/#{my_task.id}", params: valid_update_params, headers: valid_headers
-
         expect(response).to have_http_status(:ok)
         expect(json_response['message']).to eq('Task updated successfully')
         expect(json_response['task']['title']).to eq("Rails Updated Assignment")
@@ -297,7 +296,6 @@ describe "DELETE /api/v1/tasks/:id" do
         expect {
         delete "/api/v1/tasks/#{my_task.id}", headers: valid_headers
       }.to change(user.tasks, :count).by(-1)
-
       expect(response).to have_http_status(:ok)
       expect(json_response['message']).to eq('Task deleted successfully')
       expect(json_response['task']['id']).to eq(my_task.id)
@@ -320,7 +318,6 @@ end
 context "when the task ID does not exist at all" do
   it "returns a 404 not found status" do
     delete "/api/v1/tasks/999999", headers: valid_headers
-
     expect(response).to have_http_status(:not_found)
     expect(json_response['error']).to eq("Task not found")
   end
