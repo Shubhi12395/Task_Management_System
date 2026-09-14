@@ -9,7 +9,7 @@ class User < ApplicationRecord
   has_secure_password
   validates :password, length: { minimum: 6 }, allow_nil: true
   def self.ransackable_associations(auth_object = nil)
-    [ "tasks", "avatar_attachment", "avatar_blob" , "projects","comments" ]
+    [ "tasks", "avatar_attachment", "avatar_blob", "projects", "comments" ]
   end
   def self.ransackable_attributes(auth_object = nil)
     [ "id", "id_value", "name", "email", "created_at", "updated_at" ]

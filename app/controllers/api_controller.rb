@@ -1,5 +1,6 @@
 class ApiController < ActionController::API
   include Pagy::Backend
+  include Pundit::Authorization
   before_action :authorize_request
   attr_reader :current_user
 
@@ -15,7 +16,7 @@ class ApiController < ActionController::API
 
     begin
       @decoded = JsonWebToken.decode(header)
-      return render json: { errors: [ "Unauthorized access - Invalid token payload" ] }, status: :unauthorized if @decoded.nil?
+      return render json: { errors: [ "Unauthorized access - Token has expired" ] }, status: :unauthorized if @decoded.nil?
 
       user_id = @decoded[:user_id] || @decoded["user_id"]
       @current_user = User.find(user_id)

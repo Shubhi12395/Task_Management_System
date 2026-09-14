@@ -37,10 +37,9 @@ gem "bullet"
 gem "activeadmin"
 gem "devise"
 gem "dartsass-rails"
-gem "cancancan"
+gem "pundit"
 gem "draper"
 gem "pagy", "~> 9.3"
-gem "pundit"
 gem "active_model_serializers"
 gem "acts_as_paranoid"
 # Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
@@ -78,4 +77,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "simplecov", ">= 0.12.0"
+  gem 'database_cleaner-active_record'
 end

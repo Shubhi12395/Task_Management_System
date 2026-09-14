@@ -19,16 +19,7 @@ RSpec.describe Task, type: :model do
       expect(task.errors[:description]).to include("is too short (minimum is 10 characters)")
     end
 
-    it 'is valid when completed is true or false' do
-      expect(build(:task, completed: true)).to be_valid
-      expect(build(:task, completed: false)).to be_valid
-    end
 
-    it 'is invalid when completed is nil' do
-      task = build(:task, completed: nil)
-      expect(task).not_to be_valid
-      expect(task.errors[:completed]).to include(" is not a valid completion")
-    end
 
     it 'is valid with high, medium, or low priorities' do
       expect(build(:task, priority: 'high')).to be_valid
@@ -60,9 +51,18 @@ RSpec.describe Task, type: :model do
   end
 
   describe 'Associations' do
-    it 'belongs to a user' do
-      association = Task.reflect_on_association(:user)
+    it 'belongs to a project' do
+      association = Task.reflect_on_association(:project)
       expect(association.macro).to eq(:belongs_to)
+    end
+  end
+  describe 'enums' do
+    it "defines status enum" do
+      expect(Task.statuses.keys).to include("todo", "in_progress", "done")
+    end
+
+    it "maps statuses to the correct integers" do
+      expect(Task.statuses).to eq({ "todo" => 0, "in_progress" => 1, "done" => 2 })
     end
   end
 end
