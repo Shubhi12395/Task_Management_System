@@ -10,7 +10,7 @@ class Api::V1::TasksController < ApiController
       message: "Task created successfully", task: TaskSerializer.new(@task)
       }, status: :created
     else
-      render json: { errors: task.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
     end
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Project not found" }, status: :not_found
@@ -66,7 +66,7 @@ class Api::V1::TasksController < ApiController
     @task = @task.find(params[:id])
 
     if @task.update(task_params)
-      render json:{ message: "Task updated successfully",
+      render json: { message: "Task updated successfully",
       task: TaskSerializer.new(@task) }, status: :ok
     else
       render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
@@ -80,7 +80,7 @@ class Api::V1::TasksController < ApiController
     authorize [ :api, :v1, @tasks ]
     @tasks= @tasks.where(id: params[:ids]).update(status: 2)
     serialized_tasks = ActiveModelSerializers::SerializableResource.new(@tasks, each_serializer: TaskSerializer)
-    render json: { message: "Tasks updated successfully", tasks: serialized_tasks}, status: :ok
+    render json: { message: "Tasks updated successfully", tasks: serialized_tasks }, status: :ok
   end
 
   def destroy
@@ -88,7 +88,7 @@ class Api::V1::TasksController < ApiController
     authorize [ :api, :v1, @task ]
     @task = @task.find(params[:id])
     if @task.destroy
-      render json:{ message: "Task deleted successfully",task: TaskSerializer.new(@task) }, status: :ok
+      render json: { message: "Task deleted successfully", task: TaskSerializer.new(@task) }, status: :ok
     end
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Task not found" }, status: :not_found
@@ -110,7 +110,7 @@ class Api::V1::TasksController < ApiController
       render json: { error: "No tasks due today" }, status: :not_found
     else
       authorize [ :api, :v1, @tasks ]
-      serialized_tasks = ActiveModelSerialicurrent_user.zers::SerializableResource.new(@tasks, each_serializer: TaskSerializer)
+      serialized_tasks = ActiveModelSerializers::SerializableResource.new(@tasks, each_serializer: TaskSerializer)
       render json: { tasks: serialized_tasks, meta: pagy_metadata(@pagy) }, status: :ok
     end
   end

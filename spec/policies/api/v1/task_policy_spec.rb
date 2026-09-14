@@ -1,27 +1,34 @@
+# spec/policies/api/v1/task_policy_spec.rb
 require 'rails_helper'
 
-RSpec.describe Api::V1::TaskPolicy, type: :policy do
-  let(:user) { User.new }
+RSpec.describe "Api::V1::TaskPolicy", type: :policy do
+  let(:user) { create(:user) }
+  let(:task) { create(:task) } 
+  let(:policy) { Api::V1::TaskPolicy.new(user, task) }
 
-  subject { described_class }
+  context "when evaluating global task action permissions" do
+    it "allows viewing a task" do
+      expect(policy.show?).to be true
+    end
 
-  permissions ".scope" do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+    it "allows creating a task" do
+      expect(policy.create?).to be true
+    end
 
-  permissions :show? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+    it "allows updating a task" do
+      expect(policy.update?).to be true
+    end
 
-  permissions :create? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+    it "allows deleting a task" do
+      expect(policy.destroy?).to be true
+    end
 
-  permissions :update? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+    it "allows searching for tasks" do
+      expect(policy.search?).to be true
+    end
 
-  permissions :destroy? do
-    pending "add some examples to (or delete) #{__FILE__}"
+    it "allows checking overdue tasks" do
+      expect(policy.overdue?).to be true
+    end
   end
 end

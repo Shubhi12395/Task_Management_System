@@ -8,17 +8,17 @@ RSpec.describe "Comments", type: :request do
   let(:comments) { create(:comment, commentable: task) }
   let(:token) { JsonWebToken.encode(user_id: user.id) }
   let(:valid_headers) { { "Authorization" => "Bearer #{token}" } }
-  
+
   def json_response
     JSON.parse(response.body)
   end
-  
+
   let(:valid_payload) do
     {
     comment: {
     content: "New Automated Task" } }
   end
-  
+
   describe "POST /users/comments" do
     context "with a valid JWT token" do
       it "creates a comment on the logged-in user" do
@@ -31,7 +31,7 @@ RSpec.describe "Comments", type: :request do
       end
     end
   end
-  
+
   describe "POST /tasks/:task_id/comments" do
     context "with a valid JWT token"  do
       it "creates a comment on the logged-in user" do
@@ -44,7 +44,7 @@ RSpec.describe "Comments", type: :request do
       end
     end
   end
-  
+
   describe "GET /users/comments" do
     let!(:comments) do
       Array.new(25) do
@@ -63,11 +63,11 @@ RSpec.describe "Comments", type: :request do
       expect(json_response.dig('meta', 'count')).to eq(25)
     end
   end
-  
+
   describe "GET /task/:task_id/comments" do
     let!(:comments) do
       Array.new(25) do
-        Comment.create!(content: "Test comment",commentable: task)
+        Comment.create!(content: "Test comment", commentable: task)
       end
     end
     context "with a valid JWT token" do
@@ -82,11 +82,11 @@ RSpec.describe "Comments", type: :request do
       expect(json_response.dig('meta', 'count')).to eq(25)
     end
   end
-  
+
   describe "DELETE /api/v1/users/comments/:id" do
     let!(:comment) { create(:comment, commentable: user) }
     let!(:someone_elses_comment) { create(:comment) }
-    
+
     context "with a valid JWT token" do
       context "when the comment belongs to the logged-in user" do
         it "deletes the comment and returns a success message" do
@@ -105,11 +105,11 @@ RSpec.describe "Comments", type: :request do
       end
     end
   end
-  
+
   describe "DELETE /api/v1/tasks/task_id/comments/:id" do
     let!(:comment) { create(:comment, commentable: task) }
     let!(:someone_elses_comment) { create(:comment) }
-    
+
     context "with a valid JWT token" do
       context "when the comment belongs to the logged-in user" do
         it "deletes the comment and returns a success message" do
@@ -120,7 +120,7 @@ RSpec.describe "Comments", type: :request do
         end
       end
     end
-    
+
     context "when the comment belongs to a different task" do
       it "rescues ActiveRecord::RecordNotFound, skips deletion, and returns 404" do
         expect { delete "/api/v1/tasks/#{task.id}/comments/#{someone_elses_comment.id}", headers: valid_headers }.not_to change(Comment, :count)

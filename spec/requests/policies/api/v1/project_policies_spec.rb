@@ -1,9 +1,11 @@
+# spec/policies/api/v1/project_policy_spec.rb
 require 'rails_helper'
 
-RSpec.describe "Api::V1::ProjectPolicy", type: :policy do
+RSpec.describe Api::V1::ProjectPolicy, type: :policy do
   let(:user) { create(:user) }
-  let(:project) { create(:project, user: user) }
-  let(:policy) { Api::V1::ProjectPolicy.new(user, project) }
+  let(:project) { create(:project, user: user) } 
+
+  let(:policy) { described_class.new(user, project) }
 
   context "being the owner of the resource" do
     it "allows viewing the project" do
