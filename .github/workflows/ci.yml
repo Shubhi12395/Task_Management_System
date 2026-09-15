@@ -80,7 +80,7 @@ jobs:
           --health-retries 5
     env:
       RAILS_ENV: test
-      DATABASE_URL: "postgresql://postgres:password@localhost:5432/rails_test"
+      DATABASE_URL: "postgresql://postgres:password@localhost:3000/rails_test"
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libvips libpq-dev
@@ -116,7 +116,7 @@ jobs:
           --health-retries 5
     env:
       RAILS_ENV: test
-      DATABASE_URL: "postgresql://postgres:password@localhost:5432/rails_test"
+      DATABASE_URL: "postgresql://postgres:password@localhost:3000/rails_test"
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libvips libpq-dev
