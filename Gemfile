@@ -77,5 +77,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "simplecov", ">= 0.12.0"
-  gem 'database_cleaner-active_record'
+  gem "database_cleaner-active_record"
 end

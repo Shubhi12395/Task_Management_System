@@ -20,7 +20,7 @@ FactoryBot.define do
         description { "library management system in rails" }
         status  { "todo" }
         priority  { "low" }
-        due_date { Time.zone.today}
+        due_date { Time.zone.today }
         deleted_at { nil }
     end
     factory :task2, class: 'Task' do
@@ -32,7 +32,7 @@ FactoryBot.define do
         description { "library management system in rails" }
         status  { "todo" }
         priority  { "low" }
-        due_date { Time.zone.today-6}
+        due_date { Time.zone.today-6 }
         deleted_at { nil }
           trait :skip_validate do
       to_create { |instance| instance.save(validate: false) }

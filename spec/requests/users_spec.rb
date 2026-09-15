@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe "Users", type: :request do
   let!(:user) { create(:user, name: "shubhi", password: "password123", email: "shubhi123@gmail.com", failed_attempts: 0) }
-  
+
   describe "POST /api/v1/auth/signup" do
     context "with valid parameters" do
       it "creates a new user, enqueues an email, and returns JSON data" do
@@ -12,7 +12,7 @@ RSpec.describe "Users", type: :request do
             user: { name: "shubhi", email: "shubhi2345@gmail.com", password: "password123" }
           }
         }.to have_enqueued_job(ActionMailer::MailDeliveryJob)
-        
+
         expect(response).to have_http_status(:created)
         json_response = JSON.parse(response.body)
         expect(json_response['message']).to eq('User created and mail sent successfully')
@@ -20,7 +20,7 @@ RSpec.describe "Users", type: :request do
         expect(json_response['user']['email']).to eq("shubhi2345@gmail.com")
       end
     end
-    
+
     context "with invalid parameters" do
       it "returns a 422 unprocessable entity with error messages" do
         post '/api/v1/auth/signup', params: {
@@ -33,19 +33,19 @@ RSpec.describe "Users", type: :request do
       end
     end
   end
-  
+
   describe "POST /api/v1/auth/login" do
     context "with valid credentials" do
       it "logs in the user and returns a token" do
         post '/api/v1/auth/login', params: { email: user.email, password: "password123" }
-        
+
         expect(response).to have_http_status(:ok)
         json_response = JSON.parse(response.body)
         expect(json_response['message']).to eq("login successfully")
         expect(json_response['token']).to be_present
       end
     end
-    
+
     context "with invalid credentials" do
       it "returns a 422 status for a non-existent email" do
         post '/api/v1/auth/login', params: { email: "noexistemail.com", password: "password123" }
@@ -66,20 +66,20 @@ RSpec.describe "Users", type: :request do
 
       it "locks the account out when failed attempts reach 5 or more" do
         user.update!(failed_attempts: 5)
-        
+
         post '/api/v1/auth/login', params: { email: user.email, password: "password123" }
-        
+
         expect(response).to have_http_status(:too_many_requests)
         json_response = JSON.parse(response.body)
         expect(json_response['message']).to eq("account locked due to maximum attempts failed")
       end
     end
   end
-  
+
   describe "DELETE /api/v1/auth/logout" do
     let(:token) { JsonWebToken.encode(user_id: user.id) }
     let(:headers) { { "Authorization" => "Bearer #{token}" } }
-    
+
     it "successfully logs out the user and returns a confirmation message" do
       delete '/api/v1/auth/logout', headers: headers
       expect(response).to have_http_status(:ok)
@@ -94,10 +94,10 @@ RSpec.describe "Users", type: :request do
 
     context "with correct current password credentials" do
       it "updates the password successfully" do
-        patch '/api/v1/auth/password_reset', 
-          params: { user: { email: user.email, current_password: "password123", new_password: "newsecurepassword123" } }, 
+        patch '/api/v1/auth/password_reset',
+          params: { user: { email: user.email, current_password: "password123", new_password: "newsecurepassword123" } },
           headers: headers
-        
+
         expect(response).to have_http_status(:ok)
         json_response = JSON.parse(response.body)
         expect(json_response['message']).to eq('password update successfully')
@@ -108,7 +108,7 @@ RSpec.describe "Users", type: :request do
     context "with an incorrect current password" do
       it "returns a 401 unauthorized status code" do
         patch '/api/v1/auth/password_reset', params: { user: { email: user.email, current_password: "wrongoldpassword", new_password: "newsecurepassword123" } }, headers: headers
-        
+
         expect(response).to have_http_status(:unauthorized)
         json_response = JSON.parse(response.body)
         expect(json_response['error']).to eq('Incorrect current password')
@@ -126,7 +126,7 @@ RSpec.describe "Users", type: :request do
         expect(response).to have_http_status(:ok)
         json_response = JSON.parse(response.body)
         expect(json_response['message']).to eq('otp send to the email')
-        
+
         user.reload
         expect(user.otp_code).to be_present
         expect(user.otp_expires_at).to be_present
@@ -136,7 +136,7 @@ RSpec.describe "Users", type: :request do
     context "with an unregistered email" do
       it "returns a 404 not found status" do
         post '/api/v1/auth/forgot_password', params: { user: { email: "fakeuser@notreal.com" } }
-        
+
         expect(response).to have_http_status(:not_found)
         json_response = JSON.parse(response.body)
         expect(json_response['error']).to eq('Invalid email')
@@ -154,7 +154,7 @@ RSpec.describe "Users", type: :request do
         expect(response).to have_http_status(:ok)
         json_response = JSON.parse(response.body)
         expect(json_response['message']).to eq('password updated successfully')
-        
+
         user.reload
         expect(user.otp_code).to be_nil
         expect(user.otp_expires_at).to be_nil

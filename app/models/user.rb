@@ -3,7 +3,8 @@ class User < ApplicationRecord
   has_many :projects, dependent: :destroy
   has_many :tasks, through: :projects
   has_one_attached :avatar
-   has_many :comments, as: :commentable, dependent: :destroy
+  has_many :assigned_tasks, class_name: "Task", foreign_key: "assignee_id", dependent: :nullify
+  has_many :comments, as: :commentable, dependent: :destroy
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
   has_secure_password

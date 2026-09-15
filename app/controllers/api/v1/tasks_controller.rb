@@ -18,7 +18,7 @@ class Api::V1::TasksController < ApiController
 
   def index
     @tasks=current_user.tasks.includes(:project)
-    if @tasks==nil
+    if @tasks.nil?
       render json: { error: " task not assigned" }, status: :not_found
     else
       authorize [ :api, :v1, @tasks ]

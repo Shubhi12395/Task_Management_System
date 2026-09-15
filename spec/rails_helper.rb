@@ -77,23 +77,23 @@ RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :system
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.use_transactional_fixtures = false
-  
+
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
   end
-  
+
   config.before(:each) do
     DatabaseCleaner.strategy = :transaction
   end
-  
+
   config.before(:each, type: :request) do
     DatabaseCleaner.strategy = :truncation
   end
-  
+
   config.before(:each) do
     DatabaseCleaner.start
   end
-  
+
   config.after(:each) do
     DatabaseCleaner.clean
   end
