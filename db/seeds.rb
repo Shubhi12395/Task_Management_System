@@ -9,13 +9,13 @@
 #   end
 if Rails.env.development?
   puts "Seeding development database..."
-  
+
   # 1. Admin User
   AdminUser.find_or_create_by!(email: 'admin@example.com') do |i|
     i.password = 'password'
     i.password_confirmation = 'password'
   end
-  
+
   user1 = User.find_or_create_by!(email: 'john123@example.com') do |i|
     i.name = "John Smith"
     i.password = "12345678"
@@ -40,7 +40,7 @@ if Rails.env.development?
     i.name = "Sanjana"
     i.password = "12345678"
   end
-  
+
   project1 = user1.projects.find_or_create_by!(name: "Rails Application") do |i|
     i.description = "A rails framework project"
     i.due_date =  Date.parse("2026-09-30")
@@ -83,7 +83,6 @@ if Rails.env.development?
     i.due_date = Date.parse("2026-09-29")
     i.creator_id= user3.id
     i.assignee_id=user4.id
-
   end
   task4 = project2.tasks.find_or_create_by!(title: "ui/ux design") do |i|
     i.description = "creating the ui/ux of project"
@@ -116,7 +115,6 @@ if Rails.env.development?
     i.due_date = Date.parse("2026-09-30")
     i.creator_id= user6.id
     i.assignee_id=user3.id
-
   end
   task8 = project4.tasks.find_or_create_by!(title: "adding the products") do |i|
     i.description = "completing the adding the product"
@@ -125,6 +123,6 @@ if Rails.env.development?
     i.due_date = Date.parse("2026-09-29")
     i.creator_id= user1.id
     i.assignee_id=user6.id
-
   end
+
 end

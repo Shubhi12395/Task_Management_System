@@ -8,7 +8,7 @@ class Api::V1::ProjectsController < ApiController
       message: "Project created successfully", project: ProjectSerializer.new(@project)
       }, status: :created
     else
-      render json: { errors: project.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @project.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -32,7 +32,7 @@ class Api::V1::ProjectsController < ApiController
     if @project==nil
       render json: { error: "Project not found" }, status: :not_found
     else
-      authorize [ :api, :v1, @projects ]
+      authorize [ :api, :v1, @project ]
       if @project.update(project_params)
         render json:
         { message: "Project updated successfully",
@@ -47,7 +47,7 @@ class Api::V1::ProjectsController < ApiController
 
   def destroy
     @project = @current_user.projects.find(params[:id])
-    authorize [ :api, :v1, @projects ]
+    authorize [ :api, :v1, @project ]
     if @project.destroy
       render json:
       { message: "Project deleted successfully",

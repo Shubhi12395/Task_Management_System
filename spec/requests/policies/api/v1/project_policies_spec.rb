@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::ProjectPolicy, type: :policy do
   let(:user) { create(:user) }
-  let(:project) { create(:project, user: user) } 
+  let(:project) { create(:project, user: user) }
 
   let(:policy) { described_class.new(user, project) }
 

@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe "Api::V1::TaskPolicy", type: :policy do
   let(:user) { create(:user) }
-  let(:task) { create(:task) } 
+  let(:task) { create(:task) }
   let(:policy) { Api::V1::TaskPolicy.new(user, task) }
 
   context "when evaluating global task action permissions" do
