@@ -97,7 +97,8 @@ jobs:
         run: bundle exec rails db:prepare
 
       - name: Run RSpec tests
-        run: bundle exec rspec
+      - run: bundle exec rails assets:precompile RAILS_ENV=test
+      - run: bundle exec rspec
 
   system-test:
     runs-on: ubuntu-latest
