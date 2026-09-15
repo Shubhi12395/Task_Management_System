@@ -13,7 +13,7 @@ class Api::V1::ProjectsController < ApiController
   end
 
   def index
-    @pagy, @projects = pagy(current_user.projects.includes(:user))
+    @pagy, @projects = pagy(current_user.projects&.includes(:user))
     authorize [ :api, :v1, @projects ]
     serialized_projects = ActiveModelSerializers::SerializableResource.new(@projects, each_serializer: ProjectSerializer)
     render json: { projects: serialized_projects, meta: pagy_metadata(@pagy) }, status: :ok

@@ -95,7 +95,7 @@ jobs:
 
       - name: Prepare Database
         run: bundle exec rails db:prepare
-        
+
       - name: Precompile Assets
         run: bundle exec rails assets:precompile RAILS_ENV=test
 
@@ -136,7 +136,7 @@ jobs:
         run: bundle exec rails db:prepare
 
       - name: Run System Tests
-        run: bundle exec rspec spec/system
+        run: bundle exec rspec spec
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4

@@ -18,7 +18,7 @@ class Api::V1::CommentController < ApiController
   end
   def index
     if params[:task_id]
-      commentables=current_user.tasks.includes(:project).find_by(id: params[:task_id])
+      commentables=current_user.tasks&.includes(:project).find_by(id: params[:task_id])
       @pagy, @comments = pagy(commentables.comments)
 
     else
