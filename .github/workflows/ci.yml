@@ -95,10 +95,12 @@ jobs:
 
       - name: Prepare Database
         run: bundle exec rails db:prepare
+        
+      - name: Precompile Assets
+        run: bundle exec rails assets:precompile RAILS_ENV=test
 
       - name: Run RSpec tests
-      - run: bundle exec rails assets:precompile RAILS_ENV=test
-      - run: bundle exec rspec
+        run: bundle exec rspec
 
   system-test:
     runs-on: ubuntu-latest
