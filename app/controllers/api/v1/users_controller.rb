@@ -18,7 +18,7 @@ class Api::V1::UsersController < ApiController
 
   def login
     user = User.find_by(email: params[:email])
-    if user == nil
+    if user.nil?
       render json: {
       message: "Invalid email"
       }, status: :unprocessable_entity
@@ -44,12 +44,13 @@ class Api::V1::UsersController < ApiController
   end
 
   def logout
-    current_user.refresh_token= nil
+    current_user.refresh_token = nil
     current_user.save
     render json: {
     message: "User logout successfully"
     }, status: :ok
   end
+
   def password_reset
     @user = User.find_by(email: params[:user][:email]) || current_user
     if @user.nil?
@@ -82,18 +83,12 @@ class Api::V1::UsersController < ApiController
   end
 
   def forgot_pwd_reset
-    @user.password=params[:user][:new_password]
-    @user.otp_code=nil
-    @user.otp_expires_at=nil
-    @user.save
-    render json: {
-    message: "password updated successfully" }, status: :ok
-  end
-
-  private
-
-  def user_params
-    params.require(:user).permit(:name, :email, :password,)
+    if @user.update(password: params[:user][:password], otp_code: nil, otp_expires_at: nil)
+      render json: {
+      message: "password updated successfully" }, status: :ok
+    else
+      render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   def otp_verify
@@ -105,10 +100,14 @@ class Api::V1::UsersController < ApiController
         @user.update(otp_expires_at: nil)
         return render json: { error: "Your OTP has expired. Please request a new one." }, status: :gone
       end
-
       if @user.otp_code.nil? || @user.otp_code != params[:otp].to_i
         render json: { error: "Invalid OTP. Please try again." }, status: :unauthorized
       end
     end
+  end
+  private
+
+  def user_params
+    params.require(:user).permit(:name, :email, :password,)
   end
 end

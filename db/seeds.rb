@@ -124,5 +124,31 @@ if Rails.env.development?
     i.creator_id= user1.id
     i.assignee_id=user6.id
   end
-
+   comment1=user1.comments.find_or_create_by!(content: "working on the rails project") do |i|
+    i.commentable_type=user1.id
+   end
+   comment2=user2.comments.find_or_create_by!(content: "great experience working on java project") do |i|
+    i.commentable_type=user2.id
+   end
+   comment3=user3.comments.find_or_create_by!(content: "good experience") do |i|
+    i.commentable_type=user3.id
+   end
+   comment4=user4.comments.find_or_create_by!(content: "it is my first project") do |i|
+    i.commentable_type=user4.id
+   end
+   comment5=task1.comments.find_or_create_by!(content: "working on backend developement enhanced my skills") do |i|
+    i.commentable_type=task1.id
+   end
+    comment6=task2.comments.find_or_create_by!(content: "task is quit difficult") do |i|
+    i.commentable_type=task2.id
+   end
+    comment7=task3.comments.find_or_create_by!(content: "springboot is good framework") do |i|
+    i.commentable_type=task3.id
+   end
+    comment8=task5.comments.find_or_create_by!(content: "implementing the dashborad features") do |i|
+    i.commentable_type=task5.id
+   end
+    comment9=task6.comments.find_or_create_by!(content: "found many bugs") do |i|
+    i.commentable_type=task6.id
+   end
 end

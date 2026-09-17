@@ -17,4 +17,4 @@ production:
   due_task_email:
     class: DueTaskEmailJob
     queue: background
-    schedule: "every day at 10:00am"
+    schedule: "every day at 11:00am"
