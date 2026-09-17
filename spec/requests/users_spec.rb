@@ -147,9 +147,8 @@ RSpec.describe "Users", type: :request do
   describe "PATCH /api/v1/auth/forgot_password/reset" do
     context "using an active and valid OTP token" do
       it "resets the password and deletes the security parameters from the user" do
-        # byebug
         user.update!(otp_code: 1234, otp_expires_at: 10.minutes.from_now)
-        patch '/api/v1/auth/forgot_password/reset', params: { otp: 1234, user: { email: user.email, new_password: "freshpassword123" } }
+        patch '/api/v1/auth/forgot_password/reset', params: { otp: 1234, user: { email: user.email, password: "freshpassword123" } }
 
         expect(response).to have_http_status(:ok)
         json_response = JSON.parse(response.body)
