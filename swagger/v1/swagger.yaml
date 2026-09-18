@@ -1,0 +1,741 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/v1/users/comments":
+    post:
+      summary: Creates a comment on the logged-in user
+      tags:
+      - User Comments
+      security:
+      - Bearer: {}
+      parameters: []
+      responses:
+        '201':
+          description: Comment created successfully
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: object
+                  properties:
+                    content:
+                      type: string
+                      example: New Automated Task
+                  required:
+                  - content
+              required:
+              - comment
+    get:
+      summary: Lists and paginates comments belonging to the logged-in user
+      tags:
+      - User Comments
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: Success with Pagy metadata framework
+  "/api/v1/users/comments/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Comment ID
+      required: true
+      schema:
+        type: integer
+    delete:
+      summary: Deletes a user comment
+      tags:
+      - User Comments
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: comment deleted successfully
+        '404':
+          description: Comment not found
+  "/api/v1/tasks/{task_id}/comments":
+    parameters:
+    - name: task_id
+      in: path
+      description: Task ID
+      required: true
+      schema:
+        type: integer
+    post:
+      summary: Creates a comment on a specific task
+      tags:
+      - Task Comments
+      security:
+      - Bearer: {}
+      parameters: []
+      responses:
+        '201':
+          description: Comment created successfully
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: object
+                  properties:
+                    content:
+                      type: string
+                      example: New Automated Task
+                  required:
+                  - content
+              required:
+              - comment
+    get:
+      summary: Lists and paginates comments belonging to a specific task
+      tags:
+      - Task Comments
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: Success with Pagy metadata framework
+  "/api/v1/tasks/{task_id}/comments/{id}":
+    parameters:
+    - name: task_id
+      in: path
+      description: Task ID
+      required: true
+      schema:
+        type: integer
+    - name: id
+      in: path
+      description: Comment ID
+      required: true
+      schema:
+        type: integer
+    delete:
+      summary: Deletes a task comment
+      tags:
+      - Task Comments
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: comment deleted successfully
+        '404':
+          description: Comment not found
+  "/api/v1/users/me":
+    get:
+      summary: Retrieves current user profile
+      tags:
+      - Profiles
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: successfully shows the user profile
+    patch:
+      summary: Updates current user profile
+      tags:
+      - Profiles
+      security:
+      - Bearer: {}
+      parameters: []
+      responses:
+        '200':
+          description: Profile updated successfully
+        '422':
+          description: returns error when invalid details are entered
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: shubhi
+                    email:
+                      type: string
+                      example: shubhi2345@gmail.com
+                    password:
+                      type: string
+                      example: shubhi1234
+              required:
+              - user
+  "/api/v1/users/me/avatar":
+    post:
+      summary: Uploads an avatar image
+      tags:
+      - Profiles
+      security:
+      - Bearer: {}
+      parameters: []
+      responses:
+        '200':
+          description: Avatar uploaded successfully
+        '422':
+          description: Failed to save avatar attachment
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: file
+        description: The avatar image file to upload
+  "/api/v1/projects":
+    get:
+      summary: Retrieves all projects belonging to the current user
+      tags:
+      - Projects
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: Projects retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projects:
+                    type: array
+                    items:
+                      type: object
+                  meta:
+                    type: object
+                required:
+                - projects
+                - meta
+    post:
+      summary: Creates a new project
+      tags:
+      - Projects
+      security:
+      - Bearer: []
+      parameters: []
+      responses:
+        '201':
+          description: Project created successfully
+        '422':
+          description: Unprocessable Entity (Validation failed)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: New API Design
+                    description:
+                      type: string
+                      example: Build Rswag documentations
+                    status:
+                      type: string
+                      example: pending
+                    due_date:
+                      type: string
+                      format: date
+                      example: '2026-12-31'
+                  required:
+                  - name
+              required:
+              - project
+  "/api/v1/projects/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Project ID
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Retrieves a specific project
+      tags:
+      - Projects
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: Project details retrieved
+        '404':
+          description: Project not found
+    patch:
+      summary: Updates a specific project entirely
+      tags:
+      - Projects
+      security:
+      - Bearer: []
+      parameters: []
+      responses:
+        '200':
+          description: Project updated successfully
+        '422':
+          description: Validation failed during update
+        '404':
+          description: Project not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    status:
+                      type: string
+                    due_date:
+                      type: string
+                      format: date
+    delete:
+      summary: Deletes a specific project
+      tags:
+      - Projects
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: Project deleted successfully
+        '404':
+          description: Project not found
+  "/api/v1/tasks":
+    post:
+      summary: Creates a task
+      tags:
+      - Tasks
+      security:
+      - Bearer: {}
+      parameters: []
+      responses:
+        '201':
+          description: Task created successfully
+        '401':
+          description: unauthorized status
+        '422':
+          description: unprocessable entity error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                task:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      example: New Automated Task
+                    description:
+                      type: string
+                      example: Setting up test specs
+                    status:
+                      type: string
+                      example: todo
+                    priority:
+                      type: string
+                      example: medium
+                    due_date:
+                      type: string
+                      example: 10/10/2026
+                    project_id:
+                      type: integer
+                      example: 1
+                    assignee_id:
+                      type: integer
+                      example: 2
+                  required:
+                  - title
+                  - project_id
+              required:
+              - task
+    get:
+      summary: Lists and paginates all tasks
+      tags:
+      - Tasks
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: Success with Pagy metadata framework
+    delete:
+      summary: Bulk deletes selected tasks
+      tags:
+      - Tasks
+      security:
+      - Bearer: []
+      parameters: []
+      responses:
+        '200':
+          description: Tasks deleted successfully
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+                  description: Array of task IDs to delete
+              required:
+              - ids
+  "/api/v1/tasks/sortby/{sort}":
+    parameters:
+    - name: sort
+      in: path
+      description: Sort criteria (e.g., priority, due_date)
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Lists tasks sorted by a specific parameter field attribute
+      tags:
+      - Tasks
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: Success with Pagy metadata framework sorted output
+  "/api/v1/tasks/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Task ID
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: Retrieves details of a specific task
+      tags:
+      - Tasks
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: returns the task details successfully
+        '401':
+          description: unauthorized status
+        '404':
+          description: Task not found
+    patch:
+      summary: Updates an existing task
+      tags:
+      - Tasks
+      security:
+      - Bearer: {}
+      parameters: []
+      responses:
+        '200':
+          description: Task updated successfully
+        '404':
+          description: Task not found
+        '422':
+          description: unprocessable entity status
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                task:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      example: Rails Updated Assignment
+                    description:
+                      type: string
+                      example: blood bank management system
+                    status:
+                      type: string
+                      example: todo
+                    priority:
+                      type: string
+                      example: medium
+                    due_date:
+                      type: string
+                      example: 10/10/2026
+                    assignee_id:
+                      type: integer
+                      example: 2
+                    project_id:
+                      type: integer
+                      example: 1
+              required:
+              - task
+    delete:
+      summary: Deletes a specific task
+      tags:
+      - Tasks
+      security:
+      - Bearer: []
+      parameters:
+      - name: id
+        in: path
+        description: Task ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task deleted successfully
+        '404':
+          description: Task not found
+        '401':
+          description: Unauthorized
+  "/api/v1/tasks/searchby/{title}":
+    parameters:
+    - name: title
+      in: path
+      description: The title (or partial title) to search for
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Searches and retrieves task details matching a given title
+      tags:
+      - Tasks
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: returns matching task records list successfully
+        '401':
+          description: unauthorized status
+        '404':
+          description: Task not found match scenario
+  "/api/v1/tasks/duetoday":
+    get:
+      summary: Retrieves tasks due today
+      tags:
+      - Tasks
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: Serialized tasks due today with pagy metadata
+        '404':
+          description: No tasks due today
+  "/api/v1/tasks/overdue":
+    get:
+      summary: Retrieves overdue tasks
+      tags:
+      - Tasks
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: Serialized overdue tasks with pagy metadata
+        '404':
+          description: No overdue tasks
+  "/api/v1/tasks/pending":
+    get:
+      summary: Retrieves pending tasks
+      tags:
+      - Tasks
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: Serialized pending tasks with pagy metadata
+        '404':
+          description: No pending tasks
+  "/api/v1/tasks/by_priority":
+    get:
+      summary: Retrieves tasks ordered by priority
+      tags:
+      - Tasks
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: Serialized priority tasks with pagy metadata
+        '404':
+          description: No tasks with valid priority
+  "/api/v1/users":
+    post:
+      summary: Registers a new user
+      tags:
+      - Users
+      parameters: []
+      responses:
+        '201':
+          description: User created and mail sent successfully
+        '422':
+          description: unprocessable entity (validation errors)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: John Doe
+                    email:
+                      type: string
+                      example: john@example.com
+                    password:
+                      type: string
+                      example: password123
+                  required:
+                  - name
+                  - email
+                  - password
+              required:
+              - user
+  "/api/v1/users/login":
+    post:
+      summary: Logs in a user
+      tags:
+      - Users
+      parameters: []
+      responses:
+        '200':
+          description: login successfully
+        '401':
+          description: please enter correct password
+        '422':
+          description: Invalid email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: john@example.com
+                password:
+                  type: string
+                  example: password123
+              required:
+              - email
+              - password
+  "/api/v1/users/logout":
+    delete:
+      summary: Logs out the current user
+      tags:
+      - Users
+      security:
+      - Bearer: {}
+      responses:
+        '200':
+          description: User logout successfully
+  "/api/v1/users/password_reset":
+    patch:
+      summary: Resets password for logged-in user
+      tags:
+      - Users
+      security:
+      - Bearer: {}
+      parameters: []
+      responses:
+        '200':
+          description: password update successfully
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      example: john@example.com
+                    current_password:
+                      type: string
+                      example: password123
+                    new_password:
+                      type: string
+                      example: newsecurepassword
+                  required:
+                  - current_password
+                  - new_password
+              required:
+              - user
+  "/api/v1/users/forgot_password":
+    post:
+      summary: Requests an OTP for a forgotten password
+      tags:
+      - Users
+      parameters: []
+      responses:
+        '200':
+          description: otp send to the email
+        '404':
+          description: Invalid email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      example: john@example.com
+                  required:
+                  - email
+              required:
+              - user
+  "/api/v1/users/forgot_pwd_reset":
+    patch:
+      summary: Resets password using an OTP token
+      tags:
+      - Users
+      parameters: []
+      responses:
+        '200':
+          description: password updated successfully
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                otp:
+                  type: integer
+                  example: 1234
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      example: john@example.com
+                    password:
+                      type: string
+                      example: brandnewpass
+                  required:
+                  - email
+                  - password
+              required:
+              - otp
+              - user
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com

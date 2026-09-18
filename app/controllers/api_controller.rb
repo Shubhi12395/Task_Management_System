@@ -19,7 +19,9 @@ class ApiController < ActionController::API
       return render json: { errors: [ "Unauthorized access - Token has expired" ] }, status: :unauthorized if @decoded.nil?
 
       user_id = @decoded[:user_id] || @decoded["user_id"]
-      @current_user = User.find(user_id)
+      user = User.find(user_id)
+      return render json: { errors: [ "Session expired! Login again." ] }, status: :unauthorized if user.refresh_token != header
+      @current_user = user
     rescue ActiveRecord::RecordNotFound
       render json: { errors: [ "User record not found" ] }, status: :unauthorized
     rescue JWT::DecodeError

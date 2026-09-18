@@ -16,11 +16,12 @@ class Api::V1::CommentController < ApiController
       render json: { error: "Commentable not found" }, status: :not_found
     end
   end
+
   def index
     if params[:task_id]
-      commentables=current_user.tasks&.includes(:project).find_by(id: params[:task_id])
-      @pagy, @comments = pagy(commentables.comments)
-
+      task = current_user.tasks&.includes(:project).find_by(id: params[:task_id])
+      return render json: { message: "Task not found" }, status: :not_found unless task
+      @pagy, @comments = pagy(task.comments)
     else
       commentables=current_user.comments
       @pagy, @comments = pagy(commentables)
