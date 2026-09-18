@@ -6,6 +6,10 @@ RSpec.describe "Profiles", type: :request do
   let(:token) { JsonWebToken.encode(user_id: user.id) }
   let(:headers) { { "Authorization" => "Bearer #{token}" } }
 
+  before do
+    user.update!(refresh_token: token)
+  end
+
   describe "GET /api/v1/users/me" do
     it "successfully shows the user profile" do
       get '/api/v1/users/me', headers: headers
@@ -25,7 +29,7 @@ RSpec.describe "Profiles", type: :request do
     end
 
     it "returns error when invalid details are entered" do
-patch '/api/v1/users/me', params: { user: { name: "" } }, headers: headers
+      patch '/api/v1/users/me', params: { user: { name: "" } }, headers: headers
 
       expect(response).to have_http_status(:unprocessable_content)
 

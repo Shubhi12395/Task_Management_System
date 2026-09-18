@@ -7,6 +7,9 @@ RSpec.describe "Tasks", type: :request do
   let(:token) { JsonWebToken.encode(user_id: user.id) }
   let(:valid_headers) { { "Authorization" => "Bearer #{token}" } }
   let(:invalid_headers) { { "Authorization" => "Bearer invalid_token_here" } }
+  before do
+    user.update!(refresh_token: token)
+  end
 
 
   def json_response

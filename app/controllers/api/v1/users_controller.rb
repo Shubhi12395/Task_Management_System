@@ -1,6 +1,7 @@
 class Api::V1::UsersController < ApiController
   skip_before_action :authorize_request, only: [ :create, :login, :forgot_pwd_reset, :forgot_password ]
   before_action :otp_verify, only: [ :forgot_pwd_reset ]
+
   def create
     @user = User.new(user_params)
     if @user.save
@@ -23,9 +24,12 @@ class Api::V1::UsersController < ApiController
       message: "Invalid email"
       }, status: :unprocessable_entity
     else
-      if user.failed_attempts<5
+      if user.time_stamp > Time.current
+        return render json: { message: "try after sometime" }
+      end
+      if user.failed_attempts < 5
         if user&.authenticate(params[:password])
-          token = JsonWebToken.encode(user_id: user.id)
+          token= JsonWebToken.encode(user_id: user.id)
           user.update!(failed_attempts: 0, refresh_token: token)
           render json: {
           message: "login successfully", token: token
@@ -38,7 +42,10 @@ class Api::V1::UsersController < ApiController
         end
 
       else
-        render json: { message: "account locked due to maximum attempts failed" }, status: :too_many_requests
+        user.failed_attempts = 0
+        user.time_stamp=10.minutes.from_now
+        user.save!
+        render json: { message: "account locked due to maximum attempts failed please try after sometime" }, status: :too_many_requests
       end
     end
   end
@@ -52,20 +59,16 @@ class Api::V1::UsersController < ApiController
   end
 
   def password_reset
-    @user = User.find_by(email: params[:user][:email]) || current_user
-    if @user.nil?
-      render json: { error: "Invalid Email" }, status: :not_found
-    else
-      if @user&.authenticate(params[:user][:current_password])
-        if @user.update(password: params[:user][:new_password])
-          render json: {
-          message: "password update successfully" }, status: :ok
-        else
-          render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
-        end
+    @user = current_user
+    if @user&.authenticate(params[:user][:current_password])
+      if @user.update(password: params[:user][:new_password])
+        render json: {
+        message: "password update successfully" }, status: :ok
       else
-        render json: { error: "Incorrect current password" }, status: :unauthorized
+        render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
       end
+    else
+      render json: { error: "Incorrect current password" }, status: :unauthorized
     end
   end
 

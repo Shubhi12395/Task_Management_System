@@ -76,7 +76,7 @@ path '/api/v1/auth/logout' do
     produces 'application/json'
 
     response '200', 'User logout successfully' do
-     let(:user) { create(:user) }
+      let(:user) { create(:user) }
       let(:token) { JsonWebToken.encode(user_id: user.id) }
       let(:Authorization) { "Bearer #{token}" }
       before do
@@ -112,8 +112,8 @@ required: [ 'user' ]
 
 response '200', 'password update successfully' do
   let(:user_record) { User.create!(name: 'John', email: 'john@example.com', password: 'password123') }
- let(:token) { JsonWebToken.encode(user_id: user_record.id) }
-      let(:Authorization) { "Bearer #{token}" }
+  let(:token) { JsonWebToken.encode(user_id: user_record.id) }
+  let(:Authorization) { "Bearer #{token}" }
   let(:password_data) { { user: { email: 'john@example.com', current_password: 'password123', new_password: 'newsecurepassword' } } }
   before do
     user_record.update!(refresh_token: token)
