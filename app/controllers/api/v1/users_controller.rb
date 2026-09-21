@@ -1,6 +1,9 @@
 class Api::V1::UsersController < ApiController
-  skip_before_action :authorize_request, only: [ :create, :login, :forgot_pwd_reset, :forgot_password ]
+  skip_before_action :authorize_request, only: [ :new, :create, :login, :forgot_pwd_reset, :forgot_password ]
   before_action :otp_verify, only: [ :forgot_pwd_reset ]
+  def new
+    @user = User.new
+  end
 
   def create
     @user = User.new(user_params)
@@ -16,40 +19,40 @@ class Api::V1::UsersController < ApiController
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end
   end
-
+  
   def login
-    user = User.find_by(email: params[:email])
-    if user.nil?
+    @user = User.find_by(email: params[:email])
+    if @user.nil?
       render json: {
       message: "Invalid email"
       }, status: :unprocessable_entity
     else
-      if user.time_stamp > Time.current
+      if @user.time_stamp > Time.current
         return render json: { message: "try after sometime" }
       end
-      if user.failed_attempts < 5
-        if user&.authenticate(params[:password])
-          token= JsonWebToken.encode(user_id: user.id)
-          user.update!(failed_attempts: 0, refresh_token: token)
+      if @user.failed_attempts < 5
+        if @user&.authenticate(params[:password])
+          token= JsonWebToken.encode(user_id: @user.id)
+          @user.update!(failed_attempts: 0, refresh_token: token)
           render json: {
           message: "login successfully", token: token
           }, status: :ok
         else
-          user.increment!(:failed_attempts)
+          @user.increment!(:failed_attempts)
           render json: {
-          error: "please enter correct password", attempts: user.failed_attempts
+          error: "please enter correct password", attempts: @user.failed_attempts
           }, status: :unauthorized
         end
-
+        
       else
-        user.failed_attempts = 0
-        user.time_stamp=10.minutes.from_now
-        user.save!
+        @user.failed_attempts = 0
+        @user.time_stamp=10.minutes.from_now
+        @user.save!
         render json: { message: "account locked due to maximum attempts failed please try after sometime" }, status: :too_many_requests
       end
     end
   end
-
+  
   def logout
     current_user.refresh_token = nil
     current_user.save
@@ -57,7 +60,7 @@ class Api::V1::UsersController < ApiController
     message: "User logout successfully"
     }, status: :ok
   end
-
+  
   def password_reset
     @user = current_user
     if @user&.authenticate(params[:user][:current_password])
@@ -71,7 +74,7 @@ class Api::V1::UsersController < ApiController
       render json: { error: "Incorrect current password" }, status: :unauthorized
     end
   end
-
+  
   def forgot_password
     @user=User.find_by(email: params[:user][:email])
     if @user.nil?
@@ -84,7 +87,7 @@ class Api::V1::UsersController < ApiController
       render json: { message: "otp send to the email" }, status: :ok
     end
   end
-
+  
   def forgot_pwd_reset
     if @user.update(password: params[:user][:password], otp_code: nil, otp_expires_at: nil)
       render json: {
@@ -93,7 +96,7 @@ class Api::V1::UsersController < ApiController
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end
   end
-
+  
   def otp_verify
     @user=User.find_by(email: params[:user][:email])
     if @user.nil?
@@ -109,7 +112,7 @@ class Api::V1::UsersController < ApiController
     end
   end
   private
-
+  
   def user_params
     params.require(:user).permit(:name, :email, :password,)
   end

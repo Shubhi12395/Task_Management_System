@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   namespace :api do
     namespace :v1 do
+      get "auth/signup", to: "users#new"
       post "auth/signup", to: "users#create"
       post "auth/login", to: "users#login"
       delete "auth/logout", to: "users#logout"

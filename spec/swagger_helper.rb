@@ -22,9 +22,14 @@ RSpec.configure do |config|
           }
         }
       },
-      servers: [
+       servers: [
+        {
+          url: 'http://localhost:3000',
+          description: 'Local Development Server'
+        },
         {
           url: 'https://{defaultHost}',
+          description: 'Production Server',
           variables: {
             defaultHost: {
               default: 'www.example.com'
@@ -32,6 +37,7 @@ RSpec.configure do |config|
           }
         }
       ]
+
     }
   }
 

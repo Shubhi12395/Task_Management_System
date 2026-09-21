@@ -3,11 +3,9 @@
 require 'swagger_helper'
 
 RSpec.describe 'Comments API Documentation', type: :request, swagger: true do
-  # Use lazy-loaded lets for setting up your database baseline
   let(:user_record) { User.first || User.create!(name: 'Test', email: 'test@example.com', password: 'password123') }
   let(:token) { JsonWebToken.encode(user_id: user_record.id) }
 
-  # Synchronize database state within the header resolution block
   let(:Authorization) do
     user_record.update!(refresh_token: token)
     "Bearer #{token}"
@@ -19,7 +17,7 @@ RSpec.describe 'Comments API Documentation', type: :request, swagger: true do
   path '/api/v1/users/comments' do
     post 'Creates a comment on the logged-in user' do
       tags 'User Comments'
-      security [ Bearer: [] ] # FIXED: Changed from {} to []
+      security [ Bearer: [] ]
       consumes 'application/json'
       produces 'application/json'
 
@@ -45,7 +43,7 @@ RSpec.describe 'Comments API Documentation', type: :request, swagger: true do
 
     get 'Lists and paginates comments belonging to the logged-in user' do
       tags 'User Comments'
-      security [ Bearer: [] ] # FIXED: Changed from {} to []
+      security [ Bearer: [] ]
       produces 'application/json'
 
       response '200', 'Success with Pagy metadata framework' do
@@ -59,7 +57,7 @@ RSpec.describe 'Comments API Documentation', type: :request, swagger: true do
 
     delete 'Deletes a user comment' do
       tags 'User Comments'
-      security [ Bearer: [] ] # FIXED: Changed from {} to []
+      security [ Bearer: [] ]
       produces 'application/json'
 
       response '200', 'comment deleted successfully' do
@@ -79,7 +77,7 @@ RSpec.describe 'Comments API Documentation', type: :request, swagger: true do
 
     post 'Creates a comment on a specific task' do
       tags 'Task Comments'
-      security [ Bearer: [] ] # FIXED: Changed from {} to []
+      security [ Bearer: [] ]
       consumes 'application/json'
       produces 'application/json'
 
@@ -106,7 +104,7 @@ RSpec.describe 'Comments API Documentation', type: :request, swagger: true do
 
     get 'Lists and paginates comments belonging to a specific task' do
       tags 'Task Comments'
-      security [ Bearer: [] ] # FIXED: Changed from {} to []
+      security [ Bearer: [] ]
       produces 'application/json'
 
       response '200', 'Success with Pagy metadata framework' do
@@ -122,7 +120,7 @@ RSpec.describe 'Comments API Documentation', type: :request, swagger: true do
 
     delete 'Deletes a task comment' do
       tags 'Task Comments'
-      security [ Bearer: [] ] # FIXED: Changed from {} to []
+      security [ Bearer: [] ]
       produces 'application/json'
 
       response '200', 'comment deleted successfully' do
