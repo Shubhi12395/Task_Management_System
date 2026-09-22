@@ -1,5 +1,5 @@
 <h1>Login</h1>
-<%= form_with url: "/api/v1/auth/login", method: :post do |form| %>
+<%= form_with(url: "/api/v1/auth/login", method: :post, local: true) do |form| %>
   <div>
     <%= form.label :email %>
     <%= form.email_field :email %> 
@@ -9,6 +9,8 @@
     <%= form.password_field :password %> 
   </div>
   <div>
-    <%= form.submit "login" %>
+    <%= form.submit "Login" %>
   </div>
 <% end %>
+<%= button_to "Log Out", api_v1_logout_path, method: :delete, data: { turbo: false } %>
+

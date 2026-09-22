@@ -1,0 +1,35 @@
+<h1>Tasks</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Project_id</th>
+      <th>Priority</th>
+      <th>Status</th>
+      <th>Assignee</th>
+      <th>Completed_at</th>
+      <th>Due_date</th>
+      <th>Parent_id</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tasks.each do |task| %>
+      <tr>
+        <td><%= link_to task.title, "api/v1/tasks/#{task.id}" %></td>
+        <td><%= task.description %></td>
+        <td><%= task.project.name %></td>
+        <td><%= task.priority %></td>
+        <td><%= task.status %></td>
+        <td><%= task.assignee %></td>
+        <td><%= task.completed_at %></td>
+        <td><%= task.due_date %></td>
+        <td><%= task.parent_id %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>

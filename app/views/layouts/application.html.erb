@@ -10,7 +10,7 @@
     <%= csp_meta_tag %>
 
     <%= yield :head %>
-
+    
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
@@ -22,8 +22,41 @@
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
+   
   <body>
-    <%= yield %>
+    <!-- Global Navigation Bar Layer -->
+    <nav class="global-navbar">
+      <div class="nav-brand">
+        <a href="/"> Task Manager</a>
+      </div>
+      
+      <div class="nav-links">
+        <% if @current_user.present? %>
+          <span class="user-greeting">Hi, <strong><%= @current_user.email.split('@').first %></strong></span>
+          <a href="/tasks" class="nav-link-item">Dashboard</a>
+          
+          <%= button_to "Log Out", api_v1_logout_path, 
+                        method: :delete, 
+                        class: "nav-logout-btn", 
+                        data: { turbo: false } %>
+        <% else %>
+          <a href="/api/v1/auth/login" class="nav-link-item login-style">Login</a>
+        <% end %>
+      </div>
+    </nav>
+
+    <!-- Flash Messages Wrapper -->
+    <div class="flash-container">
+      <% flash.each do |type, msg| %>
+        <div class="flash flash-<%= type %>">
+          <%= msg %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Specific page templates layout here -->
+    <main class="main-content-layout">
+      <%= yield %>
+    </main>
   </body>
 </html>

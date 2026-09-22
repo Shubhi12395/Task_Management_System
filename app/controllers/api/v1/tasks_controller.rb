@@ -23,15 +23,15 @@ class Api::V1::TasksController < ApiController
     else
       authorize [ :api, :v1, @tasks ]
       @pagy, @tasks = pagy(@tasks)
-      serialized_tasks = ActiveModelSerializers::SerializableResource.new(@tasks, each_serializer: TaskSerializer)
-      render json: { tasks: serialized_tasks, meta: pagy_metadata(@pagy) }, status: :ok
+      # @tasks = ActiveModelSerializers::SerializableResource.new(@tasks, each_serializer: TaskSerializer)
+      # render json: { tasks: serialized_tasks, meta: pagy_metadata(@pagy) }, status: :ok
     end
   end
 
   def show
     @task=@current_user.tasks.find(params[:id])
     authorize [ :api, :v1, @task ]
-    render json: @task, status: :ok
+    render  @task
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Task not found" }, status: :not_found
   end
