@@ -1,0 +1,16 @@
+<h1>Update Profile</h1>
+<%= form_with( model: [:api, :v1, @current_user],url: "/api/v1/users/me", method: :patch, local: true) do |form| %>
+  <div> 
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+  <br>
+  <div>
+    <%= form.label :email %>
+    <%= form.email_field :email %> 
+  </div>
+  <br>
+  <div>
+    <%= form.submit "Update Profile" %>
+  </div>
+<% end %>

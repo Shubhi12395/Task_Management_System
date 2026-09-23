@@ -1,23 +1,30 @@
 class Api::V1::TasksController < ApiController
   include Pundit::Authorization
-  def create
-    project = current_user.projects.find(params[:task][:project_id])
-    @task = project.tasks.new(task_params)
-    authorize [ :api, :v1, @task ]
-    @task.creator_id=current_user.id
-    if @task.save
-      render json: {
-      message: "Task created successfully", task: TaskSerializer.new(@task)
-      }, status: :created
-    else
-      render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
-    end
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: "Project not found" }, status: :not_found
+  def new
+    @task=Task.new
   end
-
+  
+  def create
+    project_id = params[:task]&.[](:project_id) || params[:project_id]
+    
+    project = current_user.projects.find(project_id)
+    @task = project.tasks.new(task_params)
+    
+    authorize [ :api, :v1, @task ]
+    @task.creator_id = current_user.id
+    
+    if @task.save!
+      redirect_to api_v1_tasks_path, notice: "Task created successfully!"
+    else
+      render :new, status: :unprocessable_entity
+    end
+    
+  rescue ActiveRecord::RecordNotFound
+    render :new, status: :not_found
+  end
+  
   def index
-    @tasks=current_user.tasks&.includes(:project)
+    @tasks=@current_user.tasks&.includes(:project)
     if @tasks.nil?
       render json: { error: " task not assigned" }, status: :not_found
     else
@@ -27,15 +34,14 @@ class Api::V1::TasksController < ApiController
       # render json: { tasks: serialized_tasks, meta: pagy_metadata(@pagy) }, status: :ok
     end
   end
-
+  
   def show
     @task=@current_user.tasks.find(params[:id])
     authorize [ :api, :v1, @task ]
-    render  @task
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Task not found" }, status: :not_found
   end
-
+  
   def sort
     scope = current_user.tasks.includes(:project)
     authorize [ :api, :v1, scope ]
@@ -45,7 +51,7 @@ class Api::V1::TasksController < ApiController
     serialized_tasks = ActiveModelSerializers::SerializableResource.new(@tasks, each_serializer: TaskSerializer)
     render json: { tasks: serialized_tasks, meta: pagy_metadata(@pagy) }, status: :ok
   end
-
+  
   def search
     @task=@current_user.tasks
     authorize [ :api, :v1, @task ]
@@ -59,22 +65,28 @@ class Api::V1::TasksController < ApiController
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Task not found" }, status: :not_found
   end
-
+  
+  def edit
+    @task = current_user.tasks.find(params[:id])
+    authorize [ :api, :v1, @task ]
+  end
+  
   def update
     @task = @current_user.tasks
     authorize [ :api, :v1, @task ]
     @task = @task.find(params[:id])
-
+    
     if @task.update(task_params)
-      render json: { message: "Task updated successfully",
-      task: TaskSerializer.new(@task) }, status: :ok
+      redirect_to "/api/v1/tasks/#{@task.id}", notice: "Task updated successfully!"
+      # render json: { message: "Task updated successfully",
+      # task: TaskSerializer.new(@task) }, status: :ok
     else
-      render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
+       render :edit, status: :unprocessable_entity
     end
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Task not found" }, status: :not_found
   end
-
+  
   def update_all
     @tasks= @current_user.tasks
     authorize [ :api, :v1, @tasks ]
@@ -82,7 +94,7 @@ class Api::V1::TasksController < ApiController
     serialized_tasks = ActiveModelSerializers::SerializableResource.new(@tasks, each_serializer: TaskSerializer)
     render json: { message: "Tasks updated successfully", tasks: serialized_tasks }, status: :ok
   end
-
+  
   def destroy
     @task = @current_user.tasks
     authorize [ :api, :v1, @task ]
@@ -93,17 +105,17 @@ class Api::V1::TasksController < ApiController
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Task not found" }, status: :not_found
   end
-
+  
   def destroy_all
     @tasks=@current_user.tasks
     authorize [ :api, :v1, @tasks ]
-     @tasks.where(id: params[:ids]).destroy_all
+    @tasks.where(id: params[:ids]).destroy_all
     render json: { message: "Tasks deleted successfully" }, status: :ok
-
+    
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Task not found" }, status: :not_found
   end
-
+  
   def duetoday
     @pagy, @tasks = pagy(current_user.tasks.duetoday.includes(:project))
     if @tasks.empty?
@@ -114,7 +126,7 @@ class Api::V1::TasksController < ApiController
       render json: { tasks: serialized_tasks, meta: pagy_metadata(@pagy) }, status: :ok
     end
   end
-
+  
   def overdue
     @pagy, @tasks = pagy(current_user.tasks.overdue.includes(:project))
     if @tasks.empty?
@@ -125,7 +137,7 @@ class Api::V1::TasksController < ApiController
       render json: { tasks: serialized_tasks, meta: pagy_metadata(@pagy) }, status: :ok
     end
   end
-
+  
   def pending
     @pagy, @tasks = pagy(current_user.tasks.pending.includes(:project))
     if @tasks.empty?
@@ -136,7 +148,7 @@ class Api::V1::TasksController < ApiController
       render json: { tasks: serialized_tasks, meta: pagy_metadata(@pagy) }, status: :ok
     end
   end
-
+  
   def by_priority
     @pagy, @tasks = pagy(current_user.tasks.by_priority.includes(:project))
     if @tasks.empty?
@@ -147,7 +159,7 @@ class Api::V1::TasksController < ApiController
       render json: { tasks: serialized_tasks, meta: pagy_metadata(@pagy) }, status: :ok
     end
   end
-
+  
   private
   def task_params
     params.require(:task).permit(:title, :description, :status, :priority, :due_date, :completed_at, :project_id, :assignee_id, :parent_id)

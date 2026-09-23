@@ -1,0 +1,40 @@
+<h1>Create a New Project</h1>
+
+<%= form_with(model: [:api, :v1, @project], url: "/api/v1/projects/#{@project.id}",  method: :patch, local: true) do |f| %>
+  
+  
+  <div>
+  <%= f.label :name %>
+    <br>
+  <%= f.text_field :name %>
+  </div>
+  <br>
+  
+  <div>
+  <%= f.label :description %>
+    <br>
+  <%= f.text_area :description %>
+  </div>
+  <br>
+  <div>
+  <%= f.label :status %>
+    <br>
+  <%= f.select :status, Project.statuses.keys.map { |p| [p.humanize, p] }, prompt: "Choose status..." %>
+  </div>
+  <br>
+  <div>
+  <%= f.label :due_date %>
+    <br>
+  <%= f.date_field :due_date %>
+  </div>
+ 
+  <br>
+  <br>
+  <div>
+  <%= f.submit "update Project" %>
+  </div>
+  <% end %>
+  
+<br>
+  <%= link_to "Back to Project", api_v1_projects_path %>
+  

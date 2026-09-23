@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       patch "auth/forgot_password/reset", to: "users#forgot_pwd_reset"
       
       get "users/me",  to:  "profile#show"
+      get "users/me/edit",  to:  "profile#edit"
       patch "users/me",   to:  "profile#update"
       post "users/me/avatar", to: "profile#avatar"
       
@@ -31,7 +32,8 @@ Rails.application.routes.draw do
       get "tasks/:id", to: "tasks#show"
       get "tasks/sortby/:sort",   to: "tasks#sort"
       get "tasks/searchby/:search", to: "tasks#search"
-      patch "tasks/:id", to: "tasks#update"
+      get "tasks/:id/edit", to: "tasks#edit"
+      patch "tasks/:id", to: "tasks#update", as: :api_v1_task
       patch "tasks", to: "tasks#update_all"
       delete "tasks/:id", to: "tasks#destroy"
       delete "tasks", to: "tasks#destroy_all"
@@ -39,6 +41,7 @@ Rails.application.routes.draw do
       post "projects",    to:  "projects#create"
       get "projects",   to: "projects#index"
       get "projects/:id", to: "projects#show"
+      get "projects/:id/edit", to: "projects#edit"
       patch "projects/:id", to: "projects#update"
       delete "projects/:id", to: "projects#destroy"
       

@@ -1,4 +1,5 @@
 class ApiController < ActionController::Base
+  layout "application"
   include Pagy::Backend
   include Pundit::Authorization
   before_action :authorize_request

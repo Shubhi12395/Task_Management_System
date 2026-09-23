@@ -1,0 +1,26 @@
+<h1>Projects</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Status</th>
+      <th>Due_date</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @projects.each do |project| %>
+      <tr>
+       <td><%= link_to project.name, "/api/v1/projects/#{project.id}" %></td>
+        <td><%= project.description %></td>
+        <td><%= project.status %></td>
+        <td><%= project.due_date %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+<%= button_to "create project", api_v1_projects_path, method: :post, data: { turbo: false } %>

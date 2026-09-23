@@ -1,0 +1,64 @@
+<h1>Create a New Task</h1>
+
+<%= form_with(model: [:api, :v1, @task], url: "/api/v1/tasks/#{@task.id}",  method: :patch, local: true) do |f| %>
+  
+  
+  <div>
+  <%= f.label :title %>
+    <br>
+  <%= f.text_field :title %>
+  </div>
+  <br>
+  
+  <div>
+  <%= f.label :description %>
+    <br>
+  <%= f.text_area :description %>
+  </div>
+  <br>
+  
+  <div>
+  <%= f.label :project_id, "Select Project" %>
+    <br>
+  <%= f.collection_select :project_id, @current_user.projects, :id, :name, prompt: "Choose a project" %>
+  </div>
+  <br>
+  <div>
+  <%= f.label :priorty %>
+    <br>
+  <%= f.select :priority, [["Low", "low"], ["Medium", "medium"], ["High", "high"]], prompt: "Choose priority" %>
+  </div>
+  <br>
+  <div>
+  <%= f.label :status %>
+    <br>
+  <%= f.select :status, Task.statuses.keys.map { |p| [p.humanize, p] }, prompt: "Choose status..." %>
+  </div>
+  <br>
+  <div>
+  <%= f.label :due_date %>
+    <br>
+  <%= f.date_field :due_date %>
+  </div>
+  <div>
+  <%= f.label :completed_at %>
+    <br>
+  <div>
+  <%= f.date_field :completed_at %>
+  </div>
+  <br>
+  <div>
+  <%= f.label :parent_id, "Select task" %>
+    <br>
+  <%= f.collection_select :parent_id, @current_user.tasks, :id, :title, prompt: "Choose a parent task" %>
+  </div>
+  <br>
+  <br>
+  <div>
+  <%= f.submit "update Task" %>
+  </div>
+  <% end %>
+  
+<br>
+  <%= link_to "Back to Tasks", api_v1_tasks_path %>
+  

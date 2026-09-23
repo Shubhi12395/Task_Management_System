@@ -1,0 +1,21 @@
+<h1>Profile</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+      <tr>
+        <td><%= @current_user.name %></td>
+        <td><%= @current_user.email %></td>
+      </tr>
+  </tbody>
+</table>
+<br>
+<%= button_to "Edit profile", "/api/v1/users/me/edit", method: :get,  data: { turbo: false } %>
+

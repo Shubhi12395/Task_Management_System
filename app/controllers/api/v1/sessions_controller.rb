@@ -21,7 +21,7 @@ class Api::V1::SessionsController < ApiController
           token= JsonWebToken.encode(user_id: @user.id)
           @user.update!(failed_attempts: 0, refresh_token: token)
           cookies.signed[:refresh_token] = { value: token, httponly: true, expires: 24.hours.from_now}
-          redirect_to api_v1_tasks_path
+          redirect_to api_v1_tasks_path, notice: "login successfully"
         else
           @user.increment!(:failed_attempts)
           render json: {
