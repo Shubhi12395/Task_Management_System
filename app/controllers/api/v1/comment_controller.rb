@@ -43,8 +43,7 @@ class Api::V1::CommentController < ApiController
     else
       render json: { error: "Commentable not found" }, status: :not_found
     end
-  rescue
-    ActiveRecord::RecordNotFound
+  rescue ActiveRecord::RecordNotFound
     render json: { error: "Comment not found" }, status: :not_found
   end
 

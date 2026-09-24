@@ -5,6 +5,7 @@
     <tr>
       <th>Name</th>
       <th>Email</th>
+      <th>Avatar</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -13,9 +14,19 @@
       <tr>
         <td><%= @current_user.name %></td>
         <td><%= @current_user.email %></td>
+        <td><% if @current_user.avatar.attached? %>
+          <%= image_tag @current_user.avatar, style: "width: 150px; height: 150px; object-fit: cover;" %>
+        <% else %>
+          <span>No avatar uploaded</span>
+        <% end %></td>
       </tr>
+       
   </tbody>
+  
 </table>
 <br>
-<%= button_to "Edit profile", "/api/v1/users/me/edit", method: :get,  data: { turbo: false } %>
+<div>
+ 
+<br>
+<center><%= button_to "Edit profile", "/api/v1/users/me/edit", method: :get,  data: { turbo: false } %></center>
 

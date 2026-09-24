@@ -23,11 +23,10 @@ class ApiController < ActionController::Base
       user_id = @decoded[:user_id] || @decoded["user_id"]
       user = User.find(user_id)
       
-      return render json: { errors: [ "Session expired! Login again." ] }, status: :unauthorized if user.refresh_token != token
       @current_user = user
     rescue ActiveRecord::RecordNotFound
       render json: { errors: [ "User record not found" ] }, status: :unauthorized
-    rescue JWT::DecodeError
+    rescue JWT::DecodeError,JWT::ExpiredSignature
       render json: { errors: [ "Invalid token signature" ] }, status: :unauthorized
     end
   end

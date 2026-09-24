@@ -14,9 +14,9 @@ class Api::V1::TasksController < ApiController
     @task.creator_id = current_user.id
     
     if @task.save!
-      redirect_to api_v1_tasks_path, notice: "Task created successfully!"
+      render json: @task, status: :created
     else
-      render :new, status: :unprocessable_entity
+      render json: { error: @task.errors.full_messages }, status: :unprocessable_entity
     end
     
   rescue ActiveRecord::RecordNotFound
@@ -24,8 +24,8 @@ class Api::V1::TasksController < ApiController
   end
   
   def index
-    @tasks=@current_user.tasks&.includes(:project)
-    if @tasks.nil?
+    @tasks = @current_user.tasks&.includes(:project)
+    if @tasks.empty?
       render json: { error: " task not assigned" }, status: :not_found
     else
       authorize [ :api, :v1, @tasks ]
@@ -36,7 +36,7 @@ class Api::V1::TasksController < ApiController
   end
   
   def show
-    @task=@current_user.tasks.find(params[:id])
+    @task = @current_user.tasks.find(params[:id])
     authorize [ :api, :v1, @task ]
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Task not found" }, status: :not_found
@@ -72,9 +72,8 @@ class Api::V1::TasksController < ApiController
   end
   
   def update
-    @task = @current_user.tasks
+    @task = @current_user.tasks.find(params[:id])
     authorize [ :api, :v1, @task ]
-    @task = @task.find(params[:id])
     
     if @task.update(task_params)
       redirect_to "/api/v1/tasks/#{@task.id}", notice: "Task updated successfully!"
@@ -96,9 +95,8 @@ class Api::V1::TasksController < ApiController
   end
   
   def destroy
-    @task = @current_user.tasks
+    @task = @current_user.tasks.find(params[:id])
     authorize [ :api, :v1, @task ]
-    @task = @task.find(params[:id])
     if @task.destroy
       render json: { message: "Task deleted successfully", task: TaskSerializer.new(@task) }, status: :ok
     end

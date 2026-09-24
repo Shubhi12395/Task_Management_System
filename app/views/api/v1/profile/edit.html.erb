@@ -1,4 +1,12 @@
 <h1>Update Profile</h1>
+ <%= form_with(url: "/api/v1/users/me/avatar", method: :post, local: true, multipart: true) do |form| %>
+    <div>
+      <%= form.file_field :avatar, accept: 'image/png,image/jpeg,image/jpg', required: true %>
+      <%= form.submit "Upload Avatar" %>
+    </div>
+  <% end %>
+</div>
+<br>
 <%= form_with( model: [:api, :v1, @current_user],url: "/api/v1/users/me", method: :patch, local: true) do |form| %>
   <div> 
     <%= form.label :name %>
@@ -13,4 +21,5 @@
   <div>
     <%= form.submit "Update Profile" %>
   </div>
+
 <% end %>

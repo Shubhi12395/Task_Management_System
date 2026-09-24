@@ -37,7 +37,7 @@ class Api::V1::ProjectsController < ApiController
   
   def update
     @project = @current_user.projects.find(params[:id])
-    if @project.nil?
+    if @project.empty?
       render json: { error: "Project not found" }, status: :not_found
     else
       authorize [ :api, :v1, @project ]
@@ -65,7 +65,6 @@ class Api::V1::ProjectsController < ApiController
   end
   
   private
-  private
   
   def project_params
     if params[:project].present?
@@ -74,5 +73,4 @@ class Api::V1::ProjectsController < ApiController
       params.permit(:name, :description, :status, :due_date)
     end
   end
-  
 end

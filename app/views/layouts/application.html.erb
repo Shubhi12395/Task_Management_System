@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title><%= content_for(:title) || "Task Manager" %></title>
+<head> <title><%= content_for(:title) || "Task Manager" %> </title>
 <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -20,31 +19,32 @@
   </head>
 
 <body>
-<h1> Task Manager</h1>
-<nav>
+<center><h1> Task Manager</h1> </center>
 
 <% if @current_user.present? %>
-          <span class="user-greeting">Hi, <strong><%= @current_user.name.split('@').first %></strong></span>
-  <a href="/api/v1/projects">Projects</a>
-  <a href="/api/v1/tasks">Tasks</a>
-  <a href="/api/v1/users/me">Profile</a>
+     <span><b>Hi</b>, <strong><%= @current_user.name %></strong></span>
+<nav class="main-navbar">
+<b><a href="/api/v1/projects">Projects</a>
+<a href="/api/v1/tasks">Tasks</a>
+<a href="/api/v1/users/me">Profile</a></b>
 
 <%= button_to "Log Out", api_v1_logout_path, 
 
 method: :delete, 
 class: "nav-logout-btn", 
+  style: "position: absolute; top: 15px; right: 15px;",
   data: { turbo: false } %>
- 
   
         <% else %>
   <a href="/api/v1/auth/login">Login</a>
   
   <% end %>
   </nav>
-  
+  <br>
+  <br>
   <% flash.each do |type, msg| %>
         <div class="flash flash-<%= type %>">
-          <%= msg %>
+          <b><%= msg %></b>
           </div>
       <% end %>
     

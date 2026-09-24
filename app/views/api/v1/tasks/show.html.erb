@@ -23,7 +23,7 @@
         <td><%= @task.project.name %></td>
         <td><%= @task.priority %></td>
         <td><%= @task.status %></td>
-        <td><%= @task.assignee %></td>
+        <td><%= @task.assignee&.name %></td>
         <td><%= @task.completed_at %></td>
         <td><%= @task.due_date %></td>
         <td><%= @task.parent_id %></td>
@@ -33,7 +33,7 @@
 <h2>Comments</h2>
        <% @task.comments.each do |comment| %>
   <div class="comment">
-    <p><%= comment.body %></p>  <%# Assuming your column is named 'body' or 'content' %>
+    <p><%= comment.content %></p>  
   </div>
 <% end %>
 <br>

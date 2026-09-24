@@ -29,9 +29,10 @@ Rails.application.routes.draw do
       get "tasks/overdue",   to: "tasks#overdue"
       get "tasks/pending",   to: "tasks#pending"
       get "tasks/by_priority",   to: "tasks#by_priority"
-      get "tasks/:id", to: "tasks#show"
+      
       get "tasks/sortby/:sort",   to: "tasks#sort"
       get "tasks/searchby/:search", to: "tasks#search"
+      get "tasks/:id", to: "tasks#show"
       get "tasks/:id/edit", to: "tasks#edit"
       patch "tasks/:id", to: "tasks#update", as: :api_v1_task
       patch "tasks", to: "tasks#update_all"

@@ -11,9 +11,9 @@ class Api::V1::UsersController < ApiController
     @user = User.new(user_params)
     if @user.save
       token = JsonWebToken.encode(user_id: @user.id)
+      @user.update!(refresh_token: token)
       UserMailer.with(user: @user).welcome_email.deliver_later
-      flash[:notice] = "signup successfully"
-      redirect_to api_v1_auth_login_path
+      render json: { message: "signup successfully", token: token, user: @user }, status: :created
     else
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end
