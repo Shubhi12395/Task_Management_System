@@ -1,4 +1,4 @@
-<h1>Create a New Task</h1>
+<h1>Update Task</h1>
 
 <%= form_with(model: [:api, :v1, @task], url: "/api/v1/tasks/#{@task.id}",  method: :patch, local: true) do |f| %>
   
@@ -59,7 +59,7 @@
   </div>
   <br>
   <br>
-  
+
   <div>
   <%= f.submit "update Task" %>
   </div>

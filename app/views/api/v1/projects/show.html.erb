@@ -22,4 +22,6 @@
 </table>
 <br>
 <%= button_to "Edit Project", "/api/v1/projects/#{@project.id}/edit", method: :get,  data: { turbo: false } %>
+<br>
+<%= button_to "Delete Project", "/api/v1/projects/#{@project.id}", method: :delete,  data: { turbo: false } %>
 

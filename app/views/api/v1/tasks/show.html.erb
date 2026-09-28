@@ -30,13 +30,21 @@
       </tr>
   </tbody>
 </table>
-<h2>Comments</h2>
-       <% @task.comments.each do |comment| %>
-  <div class="comment">
-    <p><%= comment.content %></p>  
-  </div>
-<% end %>
+
 <br>
+<br>
+
+<h3>Comments</h3>
+<% saved_comments = @task.comments %>
+
+<% if saved_comments.any? %>
+  <%= render partial: "api/v1/comments/comment", collection: saved_comments %>
+<% else %>
+  <p>No comments found.</p>
+<% end %>
+
 <br>
 <%= button_to "Edit Task", "/api/v1/tasks/#{@task.id}/edit", method: :get,  data: { turbo: false } %>
+<br>
+<%= button_to "Delete Task", "/api/v1/tasks/#{@task.id}", method: :delete,  data: { turbo: false } %>
 

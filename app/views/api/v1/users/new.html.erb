@@ -1,9 +1,8 @@
 <h1>Sign UP</h1>
 <%= form_with(model: @user, url: "/api/v1/auth/signup", method: :post, local: true) do |form| %>
   <div> 
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </div>
+         <%= form.hidden_field :email, value: @email %>
+
   <br>
   <div>
     <%= form.label :email %>

@@ -1,4 +1,4 @@
-class Api::V1::CommentController < ApiController
+class Api::V1::CommentsController < ApiController
   def create
     if params[:task_id]
       commentable=current_user.tasks.find_by(id: params[:task_id])
@@ -18,16 +18,15 @@ class Api::V1::CommentController < ApiController
   end
 
   def index
+    byebug
     if params[:task_id]
-      task = current_user.tasks&.includes(:project).find_by(id: params[:task_id])
-      return render json: { message: "Task not found" }, status: :not_found unless task
-      @pagy, @comments = pagy(task.comments)
+      @task = current_user.tasks&.includes(:project).find_by(id: params[:task_id])
+      return render json: { message: "Task not found" }, status: :not_found unless @task
+      @pagy, @comments = pagy(@task.comments)
     else
-      commentables=current_user.comments
-      @pagy, @comments = pagy(commentables)
+        @pagy, @comments = pagy(current_user.comments)
     end
-    serialized_comments = ActiveModelSerializers::SerializableResource.new(@comments, each_serializer: CommentSerializer)
-    render json: { comments: serialized_comments, meta: pagy_metadata(@pagy) }, status: :ok
+   
   end
 
   def destroy
