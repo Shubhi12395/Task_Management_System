@@ -18,7 +18,6 @@ class Api::V1::CommentsController < ApiController
   end
 
   def index
-    byebug
     if params[:task_id]
       @task = current_user.tasks&.includes(:project).find_by(id: params[:task_id])
       return render json: { message: "Task not found" }, status: :not_found unless @task
@@ -26,7 +25,6 @@ class Api::V1::CommentsController < ApiController
     else
         @pagy, @comments = pagy(current_user.comments)
     end
-   
   end
 
   def destroy

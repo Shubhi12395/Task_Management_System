@@ -2,11 +2,11 @@ class Api::V1::UsersController < ApiController
   skip_before_action :authorize_request, only: [ :new, :create, :forgot_pwd_reset, :forgot_password ]
   before_action :otp_verify, only: [ :forgot_pwd_reset ]
   include ActionController::Flash
-  
+
   def new
     @user = User.new
   end
-  
+
   def create
     @user = User.new(user_params)
     if @user.save
@@ -18,7 +18,7 @@ class Api::V1::UsersController < ApiController
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end
   end
-  
+
   def password_reset
     @user = current_user
     if request.get?
@@ -36,7 +36,7 @@ class Api::V1::UsersController < ApiController
       end
     end
   end
-  
+
   def forgot_password
     @user=User.find_by(email: params[:email])
     if @user.nil?
@@ -50,7 +50,7 @@ class Api::V1::UsersController < ApiController
       render "api/v1/users/reset", status: :ok
     end
   end
-  
+
   def forgot_pwd_reset
     if @user.update(password: params[:user][:password], otp_code: nil, otp_expires_at: nil)
       render "api/v1/sessions/new", status: :ok
@@ -60,7 +60,7 @@ class Api::V1::UsersController < ApiController
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end
   end
-  
+
   def otp_verify
     @user=User.find_by(email: params[:email])
     if @user.nil?
@@ -76,7 +76,7 @@ class Api::V1::UsersController < ApiController
     end
   end
   private
-  
+
   def user_params
     params.require(:user).permit(:name, :email, :password,)
   end
