@@ -1,0 +1,23 @@
+
+<h1>Reset Your Password</h1>
+  
+  <%= form_with(url: "/api/v1/auth/forgot_password/reset", method: :patch, local: true, data: { turbo: false }) do |form| %>
+  
+       <%= form.hidden_field :email, value: @email %>
+    
+    <div>
+<%= form.label :otp_code, "Enter 6-Digit OTP" %>
+    <%= form.number_field :otp, required: true %> 
+</div>
+    <br>
+    <%= form.label "user[password]", "New Password" %>
+    <%= form.password_field "user[password]", required: true %>
+    </div>
+    <br>
+    <br>
+    <div>
+    <%= form.submit "Update Password" %>
+  </div>
+    
+    <% end %>
+        

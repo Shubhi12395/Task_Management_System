@@ -1,0 +1,24 @@
+<h1>Login</h1>
+<%= form_with(url: "/api/v1/auth/login", method: :post, local: true, data: { turbo: false }) do |form| %>
+  <div>
+    <%= form.label :email %>
+    <%= form.email_field :email %> 
+  </div>
+  <br>
+  <div>
+    <%= form.label :password %>
+    <%= form.password_field :password %> 
+  </div>
+  <br>
+  <div>
+    <%= form.submit "Login" %>
+  </div>
+  
+  <br>
+  
+  <div>
+    <button type="submit" formaction="/api/v1/auth/forgot_password">
+      Forgot Password
+    </button>
+  </div>
+<% end %>

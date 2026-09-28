@@ -1,0 +1,41 @@
+<h1>Create Project </h1>
+<%= form_with(scope: :project, url: "/api/v1/projects", method: :post, local: true) do |f| %>
+  
+  
+  <div>
+  <%= f.label :name %>
+    <br>
+  <%= f.text_field :name %>
+  </div>
+  <br>
+  
+  <div>
+  <%= f.label :description %>
+    <br>
+  <%= f.text_area :description %>
+  </div>
+  <br>
+  
+  
+  <div>
+  <%= f.label :status %>
+    <br>
+  <%= f.select :status, Project.statuses.keys.map { |p| [p.humanize, p] }, prompt: "Choose status..." %>
+  </div>
+  <br>
+  <div>
+  <%= f.label :due_date %>
+    <br>
+  <%= f.date_field :due_date %>
+  </div>
+  
+  <br>
+  <br>
+  <div>
+  <%= f.submit "Save Task" %>
+  </div>
+  <% end %>
+  
+<br>
+  <%= link_to "Back to projects", api_v1_projects_path %>
+  

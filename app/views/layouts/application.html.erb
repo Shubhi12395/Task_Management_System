@@ -1,18 +1,13 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= content_for(:title) || "Task Manager" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Task Manager">
-    <meta name="mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
+<head> <title><%= content_for(:title) || "Task Manager" %> </title>
+<%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= yield :head %>
-
+<%= yield :head %>
+    
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+<%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
@@ -20,10 +15,45 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+<%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+<body>
+<center><h1> Task Manager</h1> </center>
+
+<% if @current_user.present? %>
+     <span><b>Hi</b>, <strong><%= @current_user.name %></strong></span>
+<nav class="main-navbar">
+<h2>
+  <div style="display: inline-flex; gap: 15px;">
+    <a href="/api/v1/projects">Projects</a>
+    <a href="/api/v1/tasks">Tasks</a>
+    <a href="/api/v1/users/me">Profile</a>
+  </div>
+</h2>
+
+<%= button_to "Log Out", api_v1_logout_path, 
+
+method: :delete, 
+class: "nav-logout-btn", 
+  style: "position: absolute; top: 15px; right: 15px;",
+  data: { turbo: false } %>
+  
+        
+  
+  <% end %>
+  </nav>
+  <br>
+  <br>
+  <% flash.each do |type, msg| %>
+        <div class="flash flash-<%= type %>">
+          <b><%= msg %></b>
+          </div>
+      <% end %>
+    
+    <main class="main-content-layout">
+      <%= yield %>
+    </main>
   </body>
 </html>
+    
